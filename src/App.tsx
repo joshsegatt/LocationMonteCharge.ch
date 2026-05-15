@@ -218,14 +218,14 @@ const ContactPage = ({ navigateTo }: { navigateTo: (page: 'home' | 'contact') =>
       initial={{ opacity: 0 }} 
       animate={{ opacity: 1 }} 
       exit={{ opacity: 0 }} 
-      className="h-screen bg-[#070B0F] pt-24 pb-12 px-6 md:px-12 lg:px-20 relative overflow-hidden flex flex-col items-center justify-center"
+      className="h-screen bg-petrol pt-24 pb-12 px-6 md:px-12 lg:px-20 relative overflow-hidden flex flex-col items-center justify-center"
     >
     <AuroraBackground />
-    <div className="absolute inset-0 technical-grid opacity-[0.03] pointer-events-none" />
+    <div className="absolute inset-0 technical-grid opacity-[0.06] pointer-events-none" />
     
     {/* Subtle Depth Accents */}
-    <div className="absolute top-1/4 -left-20 w-96 h-96 bg-orange/5 rounded-full blur-[120px] pointer-events-none" />
-    <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-orange/5 rounded-full blur-[120px] pointer-events-none" />
+    <div className="absolute top-1/4 -left-20 w-96 h-96 bg-orange/10 rounded-full blur-[120px] pointer-events-none" />
+    <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-orange/10 rounded-full blur-[120px] pointer-events-none" />
 
     <div className="max-w-7xl mx-auto w-full relative z-10 flex flex-col justify-center">
       {/* Compact Header Section */}
@@ -234,7 +234,7 @@ const ContactPage = ({ navigateTo }: { navigateTo: (page: 'home' | 'contact') =>
         <h1 className="text-[clamp(1.8rem,5vw,3rem)] font-display font-black uppercase tracking-tighter leading-none text-off-white mb-3">
           Prêt pour le <span className="text-orange italic text-[0.95em]">Déploiement?</span>
         </h1>
-        <p className="text-steel max-w-xl mx-auto lg:mx-0 text-xs md:text-sm leading-relaxed font-medium opacity-50 tracking-wide uppercase">
+        <p className="text-steel max-w-xl mx-auto lg:mx-0 text-xs md:text-sm leading-relaxed font-medium opacity-80 tracking-wide uppercase">
           Expertise suisse certifiée pour opérations complexes dans toute la Suisse.
         </p>
       </div>
@@ -258,7 +258,7 @@ const ContactPage = ({ navigateTo }: { navigateTo: (page: 'home' | 'contact') =>
                     <item.icon className="text-orange relative z-10" size={20} strokeWidth={1.5} />
                   </div>
                   <div className="space-y-0.5">
-                    <span className="font-mono text-[7px] text-orange tracking-[0.3em] uppercase font-black opacity-80">{item.label}</span>
+                    <span className="font-mono text-[7px] text-orange tracking-[0.3em] uppercase font-black opacity-100">{item.label}</span>
                     <h3 className="text-lg md:text-xl font-display font-black text-off-white tracking-tighter group-hover:text-orange transition-colors duration-500 truncate">
                       {item.val}
                     </h3>
@@ -343,7 +343,7 @@ const ContactPage = ({ navigateTo }: { navigateTo: (page: 'home' | 'contact') =>
                     <div className="flex justify-between items-end border-b border-white/5 pb-4 mb-6">
                       <div className="space-y-0.5">
                         <h2 className="text-2xl font-display font-black uppercase tracking-tighter text-off-white">Dossier Mission</h2>
-                        <p className="text-[8px] font-mono text-steel uppercase tracking-[0.4em] font-black opacity-30">GENÈVE-OPS / v4.0</p>
+                        <p className="text-[8px] font-mono text-steel uppercase tracking-[0.4em] font-black opacity-50">GENÈVE-OPS / v4.0</p>
                       </div>
                     </div>
                     
@@ -367,15 +367,15 @@ const ContactPage = ({ navigateTo }: { navigateTo: (page: 'home' | 'contact') =>
                       }}
                     >
                       <div className="space-y-1">
-                        <label className="text-[7px] font-mono text-steel uppercase tracking-widest font-black ml-1 opacity-60">Client ID</label>
+                        <label className="text-[7px] font-mono text-steel uppercase tracking-widest font-black ml-1 opacity-100">Client ID</label>
                         <input name="name" required type="text" className="w-full bg-white/[0.02] border-b border-white/10 px-0 py-2 text-off-white focus:border-orange transition-all outline-none text-xs placeholder:text-steel/20 font-bold" placeholder="Nom complet" />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[7px] font-mono text-steel uppercase tracking-widest font-black ml-1 opacity-60">Tech Link</label>
+                        <label className="text-[7px] font-mono text-steel uppercase tracking-widest font-black ml-1 opacity-100">Tech Link</label>
                         <input name="email" required type="email" className="w-full bg-white/[0.02] border-b border-white/10 px-0 py-2 text-off-white focus:border-orange transition-all outline-none text-xs placeholder:text-steel/20 font-bold" placeholder="Email pro" />
                       </div>
                       <div className="col-span-1 md:col-span-2 space-y-1 flex-1">
-                        <label className="text-[7px] font-mono text-steel uppercase tracking-widest font-black ml-1 opacity-60">Operational Details</label>
+                        <label className="text-[7px] font-mono text-steel uppercase tracking-widest font-black ml-1 opacity-100">Operational Details</label>
                         <textarea name="message" required className="w-full bg-white/[0.02] border-b border-white/10 px-0 py-2 text-off-white focus:border-orange transition-all outline-none text-xs h-16 md:h-20 resize-none placeholder:text-steel/20 font-bold" placeholder="Lieu, charge, contraintes..." />
                       </div>
                       <div className="col-span-1 md:col-span-2 pt-2">
@@ -411,9 +411,9 @@ const ExpertiseCard = ({ icon: Icon, title, desc, delay }: { icon: any, title: s
     whileInView={{ opacity: 1, y: 0 }} 
     viewport={{ once: true }} 
     transition={{ duration: 0.8, delay }} 
-    className="group relative p-px rounded-[2.5rem] bg-gradient-to-b from-white/10 via-transparent to-transparent hover:from-orange/40 transition-all duration-700 shadow-2xl"
+    className="group relative p-px rounded-[2.5rem] bg-gradient-to-b from-white/10 via-transparent to-transparent hover:from-orange/40 transition-all duration-700 shadow-2xl will-change-transform"
   >
-    <div className="relative z-10 p-10 bg-[#0A0F14] rounded-[2.4rem] space-y-10 overflow-hidden h-full flex flex-col justify-between">
+    <div className="relative z-10 p-10 bg-[#0A0F14] rounded-[2.4rem] space-y-10 overflow-hidden h-full flex flex-col justify-between backdrop-blur-lg">
       {/* Light Sweep Effect */}
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
       
@@ -453,7 +453,7 @@ const WhatsAppButton = () => (
     whileHover={{ scale: 1.1, y: -5 }}
     whileTap={{ scale: 0.9 }}
     transition={{ type: "spring", stiffness: 400, damping: 17, delay: 2 }}
-    className="fixed bottom-8 right-8 z-[2000] w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] border border-white/20 cursor-pointer group"
+    className="fixed bottom-8 right-8 z-[9999] w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] border border-white/20 cursor-pointer group"
   >
     <div className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20 group-hover:opacity-40 transition-opacity" />
     <svg 
@@ -498,9 +498,7 @@ const RotatingCinematicText = () => {
   );
 };
 
-export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'contact'>('home');
-  const [activeModal, setActiveModal] = useState<'mentions' | 'security' | null>(null);
+const BackgroundVideo = React.memo(() => {
   const [videoOpacity, setVideoOpacity] = useState(0.5);
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
@@ -508,23 +506,113 @@ export default function App() {
     if (videoRef.current) {
       videoRef.current.playbackRate = 0.6;
     }
-  }, [currentPage]);
+  }, []);
 
   const handleTimeUpdate = () => {
     if (!videoRef.current) return;
     const { currentTime, duration } = videoRef.current;
     if (duration > 0) {
-      // Fade out in the last 0.8s
       if (currentTime > duration - 0.8) {
         setVideoOpacity(Math.max(0, (duration - currentTime) * 0.5));
       } else if (currentTime < 0.8) {
-        // Fade in during the first 0.8s
         setVideoOpacity(Math.min(0.5, currentTime * 0.5));
       } else {
         setVideoOpacity(0.5);
       }
     }
   };
+
+  return (
+    <motion.div initial={{ scale: 1.1 }} animate={{ scale: 1 }} transition={{ duration: 2 }} className="absolute inset-0">
+      <video 
+        ref={videoRef}
+        autoPlay 
+        muted 
+        loop 
+        playsInline 
+        preload="auto"
+        onTimeUpdate={handleTimeUpdate}
+        className="w-full h-full object-cover brightness-[1.05] contrast-[1.15] saturate-[1.1] transition-opacity duration-1000"
+        style={{ opacity: videoOpacity }}
+      >
+        <source src="/Photorealistic_Truck_Loop_Animation.mp4" type="video/mp4" />
+      </video>
+    </motion.div>
+  );
+});
+
+const workImages = [
+  "/assets/work/1.jpeg", "/assets/work/2.jpeg", "/assets/work/3.jpeg", "/assets/work/4.jpeg",
+  "/assets/work/5.jpeg", "/assets/work/6.jpeg", "/assets/work/7.jpeg", "/assets/work/8.jpeg",
+  "/assets/work/9.jpeg", "/assets/work/11.jpeg", "/assets/work/12.jpeg", "/assets/work/13.jpeg",
+  "/assets/work/14.jpeg", "/assets/work/15.jpeg", "/assets/work/16.jpeg", "/assets/work/17.jpeg"
+];
+
+const WorkMarquee = ({ onImageClick }: { onImageClick: (src: string) => void }) => {
+  const duplicatedImages = [...workImages, ...workImages];
+
+  return (
+    <section className="py-20 bg-transparent overflow-hidden pause-on-hover">
+      <div className="container mx-auto px-6 mb-10">
+        <div className="flex items-center gap-4">
+          <span className="w-12 h-[2px] bg-orange" />
+          <span className="font-mono text-[10px] text-orange tracking-[0.5em] uppercase font-black">Portfolio Opérationnel</span>
+        </div>
+      </div>
+      
+      <div className="relative flex overflow-hidden">
+        <div className="flex gap-6 px-3 min-w-max animate-marquee">
+          {duplicatedImages.map((src, idx) => (
+            <div 
+              key={idx} 
+              onClick={() => onImageClick(src)}
+              className="relative w-[280px] md:w-[400px] aspect-[4/3] rounded-[2rem] overflow-hidden border border-white/5 shadow-2xl transition-all duration-500 hover:border-orange/30 bg-white/[0.02] cursor-zoom-in group"
+            >
+              <img 
+                src={src} 
+                alt={`Monte Charge Operation ${idx}`}
+                loading="lazy"
+                className="w-full h-full object-cover object-center contrast-[1.15] saturate-[1.2] brightness-[1.05] group-hover:scale-105 transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-petrol/60 to-transparent opacity-0 group-hover:opacity-60 transition-opacity" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ImageZoomModal = ({ src, onClose }: { src: string, onClose: () => void }) => (
+  <motion.div 
+    initial={{ opacity: 0 }} 
+    animate={{ opacity: 1 }} 
+    exit={{ opacity: 0 }} 
+    onClick={onClose}
+    className="fixed inset-0 z-[5000] flex items-center justify-center p-4 md:p-12 bg-black/90 backdrop-blur-sm cursor-zoom-out"
+  >
+    <motion.div 
+      initial={{ scale: 0.9, opacity: 0 }} 
+      animate={{ scale: 1, opacity: 1 }} 
+      exit={{ scale: 0.9, opacity: 0 }}
+      className="relative max-w-5xl w-full rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <img src={src} className="w-full h-auto max-h-[85vh] object-contain mx-auto" alt="Zoomed Work" />
+      <button 
+        onClick={onClose}
+        className="absolute top-6 right-6 w-12 h-12 rounded-full bg-black/50 border border-white/10 flex items-center justify-center text-white hover:bg-orange transition-colors cursor-pointer"
+      >
+        <X size={24} />
+      </button>
+    </motion.div>
+  </motion.div>
+);
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'contact'>('home');
+  const [activeModal, setActiveModal] = useState<'mentions' | 'security' | null>(null);
+  const [selectedImg, setSelectedImg] = useState<string | null>(null);
 
   useEffect(() => {
     const handlePopState = () => {
@@ -542,15 +630,17 @@ export default function App() {
       touchMultiplier: 1.5,
     });
 
+    let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
       window.removeEventListener('popstate', handlePopState);
       lenis.destroy();
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -570,25 +660,11 @@ export default function App() {
             <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-screen relative flex items-center justify-center overflow-hidden">
               <AuroraBackground />
               <div className="absolute inset-0 pointer-events-none z-10">
-                <div className="absolute inset-0 bg-gradient-to-b from-petrol/60 via-transparent to-petrol" />
+                <div className="absolute inset-0 bg-gradient-to-b from-petrol/80 via-transparent to-petrol" />
                 <div className="absolute inset-0 technical-grid opacity-[0.03]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(7,25,37,0.4)_100%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(7,25,37,0.5)_100%)]" />
               </div>
-              <motion.div initial={{ scale: 1.1 }} animate={{ scale: 1 }} transition={{ duration: 2 }} className="absolute inset-0">
-                <video 
-                  ref={videoRef}
-                  autoPlay 
-                  muted 
-                  loop 
-                  playsInline 
-                  preload="auto"
-                  onTimeUpdate={handleTimeUpdate}
-                  className="w-full h-full object-cover brightness-[0.8] contrast-[1.1] saturate-[1.2] transition-opacity duration-1000"
-                  style={{ opacity: videoOpacity }}
-                >
-                  <source src="/Photorealistic_Truck_Loop_Animation.mp4" type="video/mp4" />
-                </video>
-              </motion.div>
+              <BackgroundVideo />
               
               <div className="container mx-auto px-6 relative z-20 text-center">
                 <RotatingCinematicText />
@@ -629,7 +705,9 @@ export default function App() {
               </div>
             </motion.section>
 
-            <motion.section id="expertise" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }} className="py-12 lg:py-24 px-4 md:px-8 lg:px-12 relative flex items-center">
+            <WorkMarquee onImageClick={(src) => setSelectedImg(src)} />
+
+            <motion.section id="expertise" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: 1.2, ease: [0.23, 1, 0.32, 1] }} className="py-24 lg:py-32 px-4 md:px-8 lg:px-12 relative flex items-center">
               <div className="max-w-6xl mx-auto w-full">
                 <SectionHeader title="Expertise Suisse" sub="Leader du levage vertical en Suisse. Nous transformons les défis logistiques complexes en manœuvres de précision de haut niveau." mono="Standard d'Excellence" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
@@ -694,9 +772,9 @@ export default function App() {
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }} 
-                      className="group relative p-px rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent hover:from-orange/30 transition-all duration-700"
+                      className="group relative p-px rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent hover:from-orange/30 transition-all duration-700 will-change-transform"
                     >
-                      <div className="relative z-10 p-10 flex flex-col justify-between rounded-[2.4rem] bg-[#0A0F14] backdrop-blur-3xl overflow-hidden shadow-2xl h-full border border-white/5">
+                      <div className="relative z-10 p-10 flex flex-col justify-between rounded-[2.4rem] bg-[#0A0F14] backdrop-blur-lg overflow-hidden shadow-2xl h-full border border-white/5">
                         {/* Interactive Grid Background */}
                         <div className="absolute inset-0 technical-grid opacity-[0.03] group-hover:opacity-[0.07] transition-opacity" />
                         
@@ -726,7 +804,7 @@ export default function App() {
                             <h4 className="text-2xl font-display font-black uppercase text-off-white group-hover:text-orange transition-colors duration-500 tracking-tighter">
                               {step.title}
                             </h4>
-                            <p className="text-[13px] text-steel leading-relaxed font-medium opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                            <p className="text-sm text-steel leading-relaxed font-medium opacity-60 group-hover:opacity-100 transition-opacity duration-500">
                               {step.desc}
                             </p>
                           </div>
@@ -795,6 +873,11 @@ export default function App() {
         )}
       </AnimatePresence>
       <WhatsAppButton />
+      <AnimatePresence>
+        {selectedImg && (
+          <ImageZoomModal src={selectedImg} onClose={() => setSelectedImg(null)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
