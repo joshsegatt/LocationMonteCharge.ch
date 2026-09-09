@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#053229" />
+      <stop offset="100%" stop-color="#021813" />
+    </linearGradient>
+    <linearGradient id="craneGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00A388" />
+      <stop offset="100%" stop-color="#38D9BA" />
+    </linearGradient>
+  </defs>
+
+  <!-- Squircle Base with Luxury Dark Forest Green -->
+  <rect width="100" height="100" rx="22" fill="url(#bgGrad)" />
+  <rect width="98" height="98" x="1" y="1" rx="21" fill="none" stroke="#38D9BA" stroke-width="1.5" stroke-opacity="0.35" />
+
+  <!-- Truck and Lift Graphic (Centered with balanced breathing room) -->
+  <g transform="translate(50, 52) scale(0.82) translate(-50, -52)">
+    <!-- Chassis -->
+    <rect x="16" y="66" width="64" height="7" rx="2" fill="#FFFFFF" />
+
+    <!-- Cabin -->
+    <path d="M 20 66 L 20 45 A 4 4 0 0 1 24 41 L 43 41 A 4 4 0 0 1 47 45 L 47 66 Z" fill="#FFFFFF" />
+    <!-- Window -->
+    <rect x="25" y="46" width="14" height="9" rx="2" fill="#053229" />
+
+    <!-- Telescopic Crane Ladder extended upwards -->
+    <g transform="translate(46, 62) rotate(-42)">
+      <!-- Main Boom -->
+      <rect x="0" y="-4" width="46" height="8" rx="3.5" fill="url(#craneGrad)" />
+      <!-- Extension Section -->
+      <rect x="36" y="-2.5" width="24" height="5" rx="2" fill="#FFFFFF" />
+      <!-- Lift Basket / Plateforme -->
+      <rect x="56" y="-9" width="13" height="8" rx="2" fill="#E10600" />
+      <!-- Pivot Joint -->
+      <circle cx="0" cy="0" r="4.5" fill="#E10600" stroke="#FFFFFF" stroke-width="1.5" />
+    </g>
+
+    <!-- Wheels -->
+    <circle cx="31" cy="73" r="8.5" fill="#021813" stroke="#38D9BA" stroke-width="2" />
+    <circle cx="31" cy="73" r="3" fill="#E10600" />
+
+    <circle cx="65" cy="73" r="8.5" fill="#021813" stroke="#38D9BA" stroke-width="2" />
+    <circle cx="65" cy="73" r="3" fill="#E10600" />
+  </g>
+</svg>

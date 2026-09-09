@@ -1,0 +1,15 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Allow: /favicon*
+Allow: /assets/
+
+# Googlebot-Image specific
+User-agent: Googlebot-Image
+Allow: /favicon*
+Allow: /assets/
+Allow: /*.png$
+Allow: /*.ico$
+Allow: /*.svg$
+
+Sitemap: https://www.locationmontecharge.ch/sitemap.xml
