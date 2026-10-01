@@ -30,6 +30,17 @@ const workItems: WorkItem[] = [
 export default function WorkShowcase({ onImageClick }: { onImageClick: (src: string) => void }) {
   const [currentIndex, setCurrentIndex] = useState(2);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const prevSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev === 0 ? workItems.length - 1 : prev - 1));
@@ -56,17 +67,34 @@ export default function WorkShowcase({ onImageClick }: { onImageClick: (src: str
     return () => clearInterval(interval);
   }, [isPaused, nextSlide]);
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) nextSlide();
+      else prevSlide();
+    }
+    setTouchStart(null);
+  };
+
   return (
     <section 
       id="realisations" 
-      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-8 select-none"
+      className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-8 select-none overflow-hidden"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Clean Single Header - No Pill Badges */}
       <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 md:mb-12 gap-4">
         <div>
-          <p className="text-[#38D9BA] text-xs sm:text-sm font-semibold uppercase tracking-widest mb-1">
+          <p className="text-[#38BDF8] text-xs sm:text-sm font-semibold uppercase tracking-widest mb-1">
             En Conditions Réelles
           </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-white tracking-tight">
@@ -94,7 +122,7 @@ export default function WorkShowcase({ onImageClick }: { onImageClick: (src: str
       </div>
 
       {/* 3D Coverflow Stage */}
-      <div className="relative h-[400px] sm:h-[460px] md:h-[520px] flex items-center justify-center overflow-hidden">
+      <div className="relative h-[380px] sm:h-[460px] md:h-[520px] flex items-center justify-center overflow-hidden">
         <div className="relative w-full h-full flex items-center justify-center">
           {workItems.map((item, idx) => {
             // Calculate distance relative to current index in a loop
@@ -104,7 +132,8 @@ export default function WorkShowcase({ onImageClick }: { onImageClick: (src: str
             if (diff < -half) diff += workItems.length;
 
             const isCenter = diff === 0;
-            const isVisible = Math.abs(diff) <= 3;
+            // On mobile, limit to adjacent cards to prevent viewport clipping
+            const isVisible = isMobile ? Math.abs(diff) <= 1 : Math.abs(diff) <= 3;
 
             if (!isVisible) return null;
 
@@ -117,22 +146,22 @@ export default function WorkShowcase({ onImageClick }: { onImageClick: (src: str
 
             if (isCenter) {
               xOffset = 0;
-              scale = 1.08;
+              scale = isMobile ? 1.0 : 1.08;
               zIndex = 30;
               opacity = 1;
               rotateY = 0;
             } else if (diff === 1) {
-              xOffset = 180;
-              scale = 0.90;
+              xOffset = isMobile ? 115 : 180;
+              scale = isMobile ? 0.82 : 0.90;
               zIndex = 20;
-              opacity = 0.85;
-              rotateY = -12;
+              opacity = isMobile ? 0.6 : 0.85;
+              rotateY = isMobile ? -16 : -12;
             } else if (diff === -1) {
-              xOffset = -180;
-              scale = 0.90;
+              xOffset = isMobile ? -115 : -180;
+              scale = isMobile ? 0.82 : 0.90;
               zIndex = 20;
-              opacity = 0.85;
-              rotateY = 12;
+              opacity = isMobile ? 0.6 : 0.85;
+              rotateY = isMobile ? 16 : 12;
             } else if (diff === 2) {
               xOffset = 330;
               scale = 0.76;

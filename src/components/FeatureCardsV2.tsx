@@ -1,77 +1,90 @@
 import React from 'react';
 import { motion } from 'motion/react';
 
-const features = [
+/* ─────────────────────────────────────────────────────────
+   Ultra-Clean Minimalist Spec Console
+   Seamless, invisible borders, zero clipart icons or tags.
+   Pure high-precision typographic metrics (Apple Pro standard).
+   ───────────────────────────────────────────────────────── */
+
+interface MetricSpec {
+  value: string;
+  unit: string;
+  label: string;
+  detail: string;
+  accent: string;
+}
+
+const specs: MetricSpec[] = [
   {
-    image: "/assets/features/securite-suva.jpg",
-    category: "Normes & Sécurité",
-    title: "Sécurité SUVA",
-    desc: "Nous transportons vos biens en toute sécurité grâce à un matériel certifié.",
+    value: "15",
+    unit: "min",
+    label: "Déploiement Express",
+    detail: "Sur site à Genève & La Côte",
+    accent: "text-[#38BDF8]"
   },
   {
-    image: "/assets/features/equipe-qualifiee.jpg",
-    category: "Précision & Savoir-faire",
-    title: "Équipe Qualifiée",
-    desc: "Opérateurs formés pour des levages d'une précision millimétrique.",
+    value: "10ᵉ",
+    unit: "étage",
+    label: "Hauteur Maximale",
+    detail: "Passage direct fenêtre ou balcon",
+    accent: "text-amber-400"
   },
   {
-    image: "/assets/features/intervention-rapide.jpg",
-    category: "Réactivité Express",
-    title: "Intervention Rapide",
-    desc: "Déploiement en un temps record pour garantir vos délais de chantier.",
+    value: "500",
+    unit: "kg max",
+    label: "Charge Utile",
+    detail: "Canapés, pianos & matériaux",
+    accent: "text-[#38BDF8]"
   },
   {
-    image: "/assets/features/flotte-moderne.jpg",
-    category: "Technologie Euro 6",
-    title: "Flotte Moderne",
-    desc: "Véhicules de dernière génération répondant aux normes environnementales.",
+    value: "100%",
+    unit: "inclus",
+    label: "Sécurité & Voirie",
+    detail: "Opérateur SUVA & Permis ville",
+    accent: "text-emerald-400"
   }
 ];
 
 export default function FeatureCardsV2() {
   return (
-    <div id="services" className="relative z-20 -mt-24 md:-mt-36 max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7">
-        {features.map((item, idx) => (
-          <motion.div 
-            key={item.title}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 * idx, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="group bg-white rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.04),0_12px_40px_rgba(0,0,0,0.06)] hover:shadow-[0_16px_40px_rgba(5,50,41,0.12),0_24px_60px_rgba(0,0,0,0.08)] border border-slate-100/80 p-5 flex flex-col justify-between transform hover:-translate-y-2 transition-all duration-500 ease-out h-full"
-          >
-            <div>
-              {/* Image Container with smooth zoom */}
-              <div className="relative aspect-[16/11] w-full rounded-[18px] overflow-hidden mb-5 bg-slate-100 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]">
-                <img 
-                  src={item.image} 
-                  alt={item.title} 
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" 
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-
-              {/* Content with Strong Contrast */}
-              <div className="flex flex-col px-1">
-                <span className="text-[10px] font-bold tracking-[0.18em] text-[#00A388] uppercase mb-1.5 block">
-                  {item.category}
+    <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 w-full -mt-8 sm:-mt-12 lg:-mt-14 pb-12 sm:pb-16">
+      {/* ── Seamless Glass Console with Ultra-Subtle/Invisible Borders ── */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        className="relative bg-[#0A192F]/60 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/[0.06] shadow-[0_20px_50px_rgba(0,0,0,0.4)] p-6 sm:p-8 overflow-hidden"
+      >
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 divide-y lg:divide-y-0 lg:divide-x divide-white/[0.06]">
+          {specs.map((item, idx) => (
+            <div 
+              key={idx} 
+              className={`pt-4 lg:pt-0 ${idx > 0 ? 'lg:pl-6 xl:pl-8' : ''} flex flex-col justify-start`}
+            >
+              {/* Tabular Value + Unit */}
+              <div className="flex items-baseline gap-1.5 mb-2">
+                <span className="text-3xl sm:text-4xl lg:text-[42px] font-display font-black text-white tracking-tight tabular-nums leading-none">
+                  {item.value}
                 </span>
-                <h3 className="text-[18px] font-display font-bold text-[#053229] tracking-tight mb-2 group-hover:text-[#00A388] transition-colors duration-300">
-                  {item.title}
-                </h3>
-                <p className="text-[13px] text-slate-600 leading-relaxed font-normal">
-                  {item.desc}
-                </p>
+                <span className={`text-xs sm:text-sm font-bold uppercase tracking-wider ${item.accent}`}>
+                  {item.unit}
+                </span>
               </div>
-            </div>
 
-            {/* Subtle Luxury Accent Line */}
-            <div className="px-1 pt-4">
-              <div className="w-7 h-[2px] bg-slate-200 group-hover:w-14 group-hover:bg-[#00A388] transition-all duration-500 rounded-full" />
+              {/* Master Label */}
+              <h3 className="text-xs sm:text-sm font-display font-bold text-slate-100 tracking-tight leading-snug mb-1">
+                {item.label}
+              </h3>
+
+              {/* Technical Sub-label */}
+              <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed font-normal">
+                {item.detail}
+              </p>
             </div>
-          </motion.div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </motion.div>
     </div>
   );
 }

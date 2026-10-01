@@ -34,7 +34,7 @@ Je souhaite obtenir un devis express pour un monte-charge :
 Merci pour votre retour rapide !`;
 
     const encoded = encodeURIComponent(msg);
-    window.open(`https://wa.me/41767718687?text=${encoded}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://wa.me/41798896406?text=${encoded}`, '_blank', 'noopener,noreferrer');
     onClose();
   };
 
@@ -58,14 +58,14 @@ Merci pour votre retour rapide !`;
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-            className="relative z-10 w-full sm:w-[440px] md:w-[480px] h-full bg-white shadow-[-15px_0_50px_rgba(5,50,41,0.22)] border-l border-slate-200/90 flex flex-col justify-between overflow-y-auto"
+            className="relative z-10 w-full sm:w-[440px] md:w-[480px] h-full bg-[#F1F5F8] shadow-[-15px_0_50px_rgba(5,50,41,0.22)] border-l border-slate-200/90 flex flex-col justify-between overflow-y-auto"
           >
-            {/* Header in site luxury green */}
-            <div className="bg-[#053229] text-white p-6 sm:p-7 relative overflow-hidden shrink-0">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-[#38D9BA]/10 rounded-full blur-2xl pointer-events-none" />
+            {/* Header in BatiMove Navy */}
+            <div className="bg-[#0A192F] text-white p-6 sm:p-7 relative overflow-hidden shrink-0">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-[#0052A3]/25 rounded-full blur-2xl pointer-events-none" />
 
               <div className="flex items-center justify-between relative z-10 mb-3">
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#38D9BA]">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#38BDF8]">
                   <Clock size={14} />
                   <span>Réponse en ~15 minutes</span>
                 </div>
@@ -193,14 +193,14 @@ Merci pour votre retour rapide !`;
               <div className="pt-4 space-y-3 shrink-0">
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-xl bg-[#053229] hover:bg-[#084d3f] border border-white/10 text-white font-display font-bold text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_8px_25px_rgba(5,50,41,0.35)] hover:shadow-[0_12px_35px_rgba(5,50,41,0.45)] hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2.5 cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-xl bg-[#E10600] hover:bg-[#C80500] border border-white/10 text-white font-display font-bold text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_6px_20px_rgba(225,6,0,0.35)] hover:shadow-[0_10px_28px_rgba(225,6,0,0.45)] hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2.5 cursor-pointer"
                 >
                   <span>Ouvrir dans WhatsApp</span>
                   <Send size={16} />
                 </button>
 
                 <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 font-medium">
-                  <ShieldCheck size={13} className="text-[#053229]" />
+                  <ShieldCheck size={13} className="text-[#0052A3]" />
                   <span>Sans engagement • Assurance RC 5M CHF</span>
                 </div>
               </div>

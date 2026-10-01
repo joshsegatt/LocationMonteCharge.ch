@@ -55,7 +55,7 @@ export default function WhatsAppWidget() {
     const finalMsg = userMsg.trim() 
       ? encodeURIComponent(userMsg.trim())
       : encodeURIComponent('Bonjour BatiMove, je souhaite obtenir un devis pour une intervention monte-meuble.');
-    window.open(`https://wa.me/41767718687?text=${finalMsg}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://wa.me/41798896406?text=${finalMsg}`, '_blank', 'noopener,noreferrer');
     setUserMsg('');
   };
 
@@ -160,7 +160,7 @@ export default function WhatsAppWidget() {
                   {quickChips.map((chip, idx) => (
                     <a
                       key={idx}
-                      href={`https://wa.me/41767718687?text=${encodeURIComponent(chip.text)}`}
+                      href={`https://wa.me/41798896406?text=${encodeURIComponent(chip.text)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-3 py-2 rounded-lg bg-slate-50 hover:bg-[#053229] hover:text-white border border-slate-200/80 text-slate-700 text-xs font-medium transition-all flex items-center justify-between group active:scale-[0.99] cursor-pointer"
@@ -174,7 +174,7 @@ export default function WhatsAppWidget() {
             </div>
 
             {/* Balloon Input & Send Bar */}
-            <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-slate-200/80 flex items-center gap-2">
+            <form onSubmit={handleSendMessage} className="p-3 bg-[#F1F5F8] border-t border-slate-200/80 flex items-center gap-2">
               <input
                 type="text"
                 value={userMsg}

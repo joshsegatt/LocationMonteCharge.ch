@@ -13,6 +13,7 @@ const NavV2 = lazy(() => import('./components/NavV2'));
 const HeroV2 = lazy(() => import('./components/HeroV2'));
 const AboutOverviewV2 = lazy(() => import('./components/AboutOverviewV2'));
 const StatsBannerV2 = lazy(() => import('./components/StatsBannerV2'));
+const LocalSeoZones = lazy(() => import('./components/LocalSeoZones'));
 const FaqSection = lazy(() => import('./components/FaqSection'));
 
 export default function App() {
@@ -66,8 +67,8 @@ export default function App() {
   };
 
   return (
-    <div className="bg-white text-slate-900 min-h-screen selection:bg-[#053229] selection:text-white">
-      <Suspense fallback={<div className="h-16 bg-white" />}>
+    <div className="bg-[#F1F5F8] text-slate-900 min-h-screen selection:bg-[#0052A3] selection:text-white">
+      <Suspense fallback={<div className="h-16 bg-[#F1F5F8]" />}>
         <NavV2 currentPage={currentPage} navigateTo={navigateTo} />
       </Suspense>
       
@@ -79,27 +80,31 @@ export default function App() {
               <HeroV2 onOpenQuoteModal={() => setIsQuoteModalOpen(true)} />
             </Suspense>
 
-            <Suspense fallback={<div className="h-64 bg-slate-50 animate-pulse" />}>
+            <Suspense fallback={<div className="h-64 bg-[#F1F5F8] animate-pulse" />}>
               <AboutOverviewV2 onContactClick={() => navigateTo('contact')} />
             </Suspense>
 
-            <div className="bg-[#021813] relative overflow-hidden text-white perspective-1200 py-12 md:py-16">
-              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_15%,rgba(0,163,136,0.15),transparent_70%)] pointer-events-none" />
-              <Suspense fallback={<div className="h-96 flex items-center justify-center animate-pulse text-[#38D9BA]">Chargement des réalisations...</div>}>
+            <div className="bg-[#0A192F] relative overflow-hidden text-white perspective-1200 py-12 md:py-16">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_15%,rgba(0,82,163,0.2),transparent_70%)] pointer-events-none" />
+              <Suspense fallback={<div className="h-96 flex items-center justify-center animate-pulse text-[#38BDF8]">Chargement des réalisations...</div>}>
                 <WorkShowcase onImageClick={(src) => setSelectedImg(src)} />
               </Suspense>
             </div>
 
-            <Suspense fallback={<div className="h-64 bg-[#053229] animate-pulse" />}>
+            <Suspense fallback={<div className="h-64 bg-[#0A192F] animate-pulse" />}>
               <StatsBannerV2 />
             </Suspense>
 
-            <Suspense fallback={<div className="h-96 bg-white animate-pulse" />}>
+            <Suspense fallback={<div className="h-96 bg-[#F1F5F8] animate-pulse" />}>
+              <LocalSeoZones onOpenQuoteModal={() => setIsQuoteModalOpen(true)} />
+            </Suspense>
+
+            <Suspense fallback={<div className="h-96 bg-[#F1F5F8] animate-pulse" />}>
               <FaqSection onOpenQuoteModal={() => setIsQuoteModalOpen(true)} />
             </Suspense>
 
             {/* REFINED SWISS ENTERPRISE FOOTER */}
-            <footer className="py-14 sm:py-16 border-t border-white/10 bg-[#021813] text-white">
+            <footer className="py-14 sm:py-16 border-t border-white/10 bg-[#071326] text-white">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
                 {/* Main Footer Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 pb-12 border-b border-white/10">
@@ -115,7 +120,7 @@ export default function App() {
                         <span className="text-lg font-display font-bold tracking-tight uppercase text-white leading-none">
                           Monte Charge
                         </span>
-                        <span className="text-[10px] font-bold tracking-wider text-[#38D9BA] uppercase mt-1 leading-none">
+                        <span className="text-[10px] font-bold tracking-wider text-[#38BDF8] uppercase mt-1 leading-none">
                           Genève • BatiMove Sàrl
                         </span>
                       </div>
@@ -128,7 +133,7 @@ export default function App() {
                         href="https://batimove.ch" 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        className="inline-flex items-center gap-1.5 text-xs text-[#38D9BA] hover:underline font-semibold"
+                        className="inline-flex items-center gap-1.5 text-xs text-[#38BDF8] hover:underline font-semibold"
                       >
                         <span>Groupe BatiMove Sàrl (batimove.ch)</span>
                         <span>↗</span>
@@ -141,7 +146,7 @@ export default function App() {
 
                   {/* Col 2: Active Navigation */}
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38D9BA] mb-4">
+                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
                       Navigation
                     </h4>
                     <ul className="space-y-2.5 text-xs text-slate-300 font-medium">
@@ -192,7 +197,7 @@ export default function App() {
                       <li>
                         <button 
                           onClick={() => navigateTo('contact')} 
-                          className="hover:text-[#38D9BA] text-white transition-colors cursor-pointer font-bold"
+                          className="hover:text-[#38BDF8] text-white transition-colors cursor-pointer font-bold"
                         >
                           Demande d'Intervention & Devis
                         </button>
@@ -202,7 +207,7 @@ export default function App() {
 
                   {/* Col 3: Compliance & Security */}
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38D9BA] mb-4">
+                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
                       Conformité & Sécurité
                     </h4>
                     <ul className="space-y-2.5 text-xs text-slate-300 font-medium">
@@ -233,24 +238,24 @@ export default function App() {
 
                   {/* Col 4: Direct Contacts */}
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38D9BA] mb-4">
+                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
                       Assistance Directe
                     </h4>
                     <div className="space-y-3 text-xs">
                       <a 
                         href="tel:0800825925" 
-                        className="flex items-center gap-2 text-white hover:text-[#38D9BA] transition-colors font-bold"
+                        className="flex items-center gap-2 text-white hover:text-[#38BDF8] transition-colors font-bold"
                       >
-                        <span className="w-2 h-2 rounded-full bg-[#38D9BA]" />
+                        <span className="w-2 h-2 rounded-full bg-[#38BDF8]" />
                         <span>0800 825 925 (Gratuit)</span>
                       </a>
                       <a 
-                        href="https://wa.me/41767718687" 
+                        href="https://wa.me/41798896406" 
                         target="_blank" 
                         rel="noopener noreferrer" 
                         className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
                       >
-                        <span>WhatsApp : 076 771 86 87</span>
+                        <span>WhatsApp : 079 889 64 06</span>
                       </a>
                       <a 
                         href="mailto:info@batimove.ch" 
@@ -279,14 +284,14 @@ export default function App() {
                     <span>Made with</span>
                     <span className="text-[#E10600]">❤️</span>
                     <span>by</span>
-                    <span className="text-white font-bold group-hover:text-[#38D9BA] transition-colors">joshsegatt</span>
+                    <span className="text-white font-bold group-hover:text-[#38BDF8] transition-colors">joshsegatt</span>
                   </a>
                 </div>
               </div>
             </footer>
           </motion.div>
         ) : (
-          <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-[#053229] animate-pulse">Chargement de la page de contact...</div>}>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-[#0052A3] animate-pulse">Chargement de la page de contact...</div>}>
             <ContactPage key="contact" navigateTo={navigateTo} />
           </Suspense>
         )}
@@ -300,7 +305,7 @@ export default function App() {
             <motion.div initial={{ scale: 0.96, opacity: 0, y: 15 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.96, opacity: 0, y: 15 }} className="relative w-full max-w-3xl bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col shadow-2xl">
               <div className="p-6 sm:p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div className="space-y-1">
-                  <span className="font-sans text-xs text-[#053229] uppercase tracking-wider font-bold">Document Officiel Suisse</span>
+                  <span className="font-sans text-xs text-[#0052A3] uppercase tracking-wider font-bold">Document Officiel Suisse</span>
                   <h2 className="text-2xl sm:text-3xl font-display font-bold text-slate-950 tracking-tight">
                     {activeModal === 'mentions' ? 'Mentions Légales & Registre' : 'Standards Sécurité & SUVA'}
                   </h2>

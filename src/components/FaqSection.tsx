@@ -49,21 +49,21 @@ export default function FaqSection({ onOpenQuoteModal }: { onOpenQuoteModal?: ()
   };
 
   return (
-    <section id="faq" className="py-20 md:py-28 bg-white border-t border-slate-100 relative">
+    <section id="faq" className="py-20 md:py-28 bg-[#F1F5F8] border-t border-slate-200/60 relative">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 md:px-12">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-          <div className="inline-flex items-center justify-center gap-2 text-[#00A388] text-xs sm:text-sm font-bold uppercase tracking-widest mb-3 text-center">
+          <div className="inline-flex items-center justify-center gap-2 text-[#0052A3] text-xs sm:text-sm font-bold uppercase tracking-widest mb-3 text-center">
             <HelpCircle size={15} className="shrink-0" />
             <span>Foire Aux Questions • FAQ Suisse</span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight leading-tight mb-4">
             Tout Savoir Sur La <br className="hidden sm:block" />
-            <span className="text-[#053229]">Location De Monte-Charge</span>
+            <span className="text-[#0052A3]">Location De Monte-Charge</span>
           </h2>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Réponses aux questions les plus fréquentes pour vos passages par fenêtre, déménagements d'appartements et chantiers à Genève, Vaud et en Suisse Romande.
+            Réponses aux questions les plus fréquentes pour vos passages par fenêtre, déménagements d'appartements e chantiers à Genève, Vaud et en Suisse Romande.
           </p>
         </div>
 
@@ -83,14 +83,14 @@ export default function FaqSection({ onOpenQuoteModal }: { onOpenQuoteModal?: ()
                   aria-expanded={isOpen}
                 >
                   <div className="space-y-1">
-                    <span className="text-[11px] font-semibold text-[#00A388] uppercase tracking-wider block">
+                    <span className="text-[11px] font-semibold text-[#0052A3] uppercase tracking-wider block">
                       {faq.category}
                     </span>
                     <h3 className="text-base sm:text-lg font-display font-bold text-slate-900 leading-snug">
                       {faq.question}
                     </h3>
                   </div>
-                  <div className={"shrink-0 w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#053229] transition-transform duration-300 " + (isOpen ? "rotate-180 bg-[#053229] text-white border-transparent" : "")}>
+                  <div className={"shrink-0 w-9 h-9 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[#0A192F] transition-transform duration-300 " + (isOpen ? "rotate-180 bg-[#0052A3] text-white border-transparent" : "")}>
                     <ChevronDown size={18} />
                   </div>
                 </button>
@@ -116,7 +116,7 @@ export default function FaqSection({ onOpenQuoteModal }: { onOpenQuoteModal?: ()
         </div>
 
         {/* Help Banner CTA */}
-        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#021813] to-[#053229] text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+        <div className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#071326] to-[#0A192F] border border-blue-950/40 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
           <div className="space-y-1.5 text-center sm:text-left">
             <h4 className="text-lg sm:text-xl font-display font-bold text-white">
               Une question spécifique pour votre passage par fenêtre ou balcon ?
@@ -130,7 +130,7 @@ export default function FaqSection({ onOpenQuoteModal }: { onOpenQuoteModal?: ()
             <button
               type="button"
               onClick={onOpenQuoteModal}
-              className="px-6 py-3 bg-[#00876c] hover:bg-[#009b7c] text-white text-xs sm:text-sm font-bold rounded-lg uppercase tracking-wider transition-all shadow-md hover:-translate-y-0.5 cursor-pointer"
+              className="px-6 py-3 bg-[#E10600] hover:bg-[#C80500] text-white text-xs sm:text-sm font-bold rounded-lg uppercase tracking-wider transition-all shadow-[0_4px_16px_rgba(225,6,0,0.35)] hover:shadow-[0_8px_25px_rgba(225,6,0,0.5)] hover:-translate-y-0.5 cursor-pointer"
             >
               Demander un devis
             </button>

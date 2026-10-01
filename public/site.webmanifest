@@ -4,8 +4,8 @@
   "description": "Expertise en levage vertical de précision et logistique en Suisse.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#053229",
-  "theme_color": "#053229",
+  "background_color": "#0A192F",
+  "theme_color": "#0A192F",
   "icons": [
     {
       "src": "/favicon-192x192.png",
