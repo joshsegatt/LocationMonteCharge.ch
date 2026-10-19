@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Phone, Mail, MapPin, Send, CheckCircle2, Clock, Navigation, ExternalLink } from 'lucide-react';
 import { AppleAestheticBackdrop } from './AppleAestheticBackdrop';
 
-export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' | 'contact') => void }) {
+export default function ContactPage({ navigateTo }: { navigateTo: (page: string) => void }) {
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success'>('idle');
 
   return (
@@ -32,7 +32,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
               Dossier De Mission <span className="text-[#0052A3]">& Contact</span>
             </h1>
             <p className="text-slate-600 text-xs sm:text-sm font-normal max-w-lg lg:text-right">
-              Coordination certifiée à Genève & Vaud. Réponse technique sous 2 heures ouvrées.
+              Coordination certifiée à Genève & Vaud. Réponse technique rapide sous 2 à 4 heures ouvrées.
             </p>
           </div>
         </div>
@@ -53,7 +53,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
                     <Phone size={18} strokeWidth={2} />
                   </div>
                   <div className="space-y-0.5 overflow-hidden">
-                    <span className="text-[10px] text-[#0052A3] font-bold tracking-wider uppercase block">Ligne Gratuite 24/7</span>
+                    <span className="text-[10px] text-[#0052A3] font-bold tracking-wider uppercase block">Ligne Gratuite Suisse</span>
                     <h3 className="text-base font-display font-bold text-slate-950 group-hover:text-[#0052A3] transition-colors truncate">
                       0800 825 925
                     </h3>
@@ -120,11 +120,6 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
                   </a>
                 </div>
 
-                {/* Pulse Pin Indicator */}
-                <div className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-md border border-slate-200 text-[10px] font-bold text-[#0052A3] flex items-center gap-1.5 shadow-sm">
-                  <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-ping" />
-                  <span>Genève Centre</span>
-                </div>
               </div>
 
               {/* Bottom Address Bar */}
@@ -167,7 +162,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
                         Dossier Transmis avec Succès
                       </h3>
                       <p className="text-slate-600 text-sm font-medium max-w-md">
-                        Un coordinateur technique BatiMove Sàrl analyse vos accès et vous contactera sous 2 heures ouvrées.
+                        Un coordinateur technique BatiMove Sàrl analyse vos accès et vous contactera dans les meilleurs délais ouvrés.
                       </p>
                     </div>
                     <button 
@@ -187,13 +182,13 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
                           Formulaire D'Intervention
                         </h2>
                         <p className="text-[11px] text-slate-500 font-medium">
-                          Spécifications techniques pour devis immédiat
+                          Spécifications techniques pour devis sans engagement
                         </p>
                       </div>
-                      <div className="flex items-center gap-1.5 text-xs text-[#0052A3] font-bold bg-[#0052A3]/[0.05] px-2.5 py-1 rounded-md">
+                      <span className="flex items-center gap-1.5 text-xs text-[#0052A3] font-semibold">
                         <Clock size={13} />
-                        <span>Réponse sous 2h</span>
-                      </div>
+                        <span>Réponse rapide</span>
+                      </span>
                     </div>
                     
                     {/* Form Fields */}
@@ -224,6 +219,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
                           name="name" 
                           required 
                           type="text" 
+                          maxLength={100}
                           className="w-full bg-slate-50/80 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none text-base sm:text-sm placeholder:text-slate-400 font-normal" 
                           placeholder="ex. Jean Dupont / Régie Immobilière SA" 
                         />
@@ -237,6 +233,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
                           name="phone"
                           required
                           type="tel"
+                          maxLength={25}
                           pattern="[\+]?[\d\s\-\(\)]{8,20}"
                           title="Format attendu: +41 79 000 00 00 ou 0800 000 000"
                           className="w-full bg-slate-50/80 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none text-base sm:text-sm placeholder:text-slate-400 font-normal"
@@ -252,6 +249,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
                           name="email"
                           required
                           type="email"
+                          maxLength={120}
                           className="w-full bg-slate-50/80 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none text-base sm:text-sm placeholder:text-slate-400 font-normal"
                           placeholder="votre.email@domaine.ch"
                         />
@@ -264,6 +262,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: 'home' 
                         <textarea 
                           name="message" 
                           required 
+                          maxLength={1500}
                           className="w-full flex-1 min-h-[90px] lg:min-h-0 bg-slate-50/80 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none text-base sm:text-sm resize-none placeholder:text-slate-400 font-normal" 
                           placeholder="Précisez la commune, l'étage (max. 10e niveau), le volume ou poids (max. 500kg) et la date souhaitée..." 
                         />

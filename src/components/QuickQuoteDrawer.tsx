@@ -58,7 +58,7 @@ Merci pour votre retour rapide !`;
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-            className="relative z-10 w-full sm:w-[440px] md:w-[480px] h-full bg-[#F1F5F8] shadow-[-15px_0_50px_rgba(5,50,41,0.22)] border-l border-slate-200/90 flex flex-col justify-between overflow-y-auto"
+            className="relative z-10 w-full sm:w-[440px] md:w-[480px] h-full bg-[#F1F5F8] shadow-[-15px_0_50px_rgba(0,82,163,0.15)] border-l border-slate-200/90 flex flex-col justify-between overflow-y-auto"
           >
             {/* Header in BatiMove Navy */}
             <div className="bg-[#0A192F] text-white p-6 sm:p-7 relative overflow-hidden shrink-0">
@@ -67,7 +67,7 @@ Merci pour votre retour rapide !`;
               <div className="flex items-center justify-between relative z-10 mb-3">
                 <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#38BDF8]">
                   <Clock size={14} />
-                  <span>Réponse en ~15 minutes</span>
+                  <span>Devis Estimatif Immédiat</span>
                 </div>
                 <button
                   onClick={onClose}
@@ -82,7 +82,7 @@ Merci pour votre retour rapide !`;
                 Devis Express WhatsApp
               </h3>
               <p className="text-slate-300 text-xs sm:text-sm mt-1 leading-relaxed relative z-10 font-normal">
-                Remplissez les détails en 30 secondes. Votre demande sera automatiquement pré-rédigée sur WhatsApp !
+                Remplissez les détails en 30 secondes pour recevoir une estimation sans engagement sur WhatsApp.
               </p>
             </div>
 
@@ -92,30 +92,32 @@ Merci pour votre retour rapide !`;
                 {/* Nom */}
                 <div className="space-y-1">
                   <label className="text-xs font-sans font-bold text-slate-700">
-                    Votre Nom / Société <span className="text-[#053229]">*</span>
+                    Votre Nom / Société <span className="text-[#0052A3]">*</span>
                   </label>
                   <input
                     type="text"
                     required
+                    maxLength={100}
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="ex. Marc Keller / Régie SA"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#053229] focus:ring-2 focus:ring-[#053229]/15 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none"
                   />
                 </div>
 
                 {/* Téléphone */}
                 <div className="space-y-1">
                   <label className="text-xs font-sans font-bold text-slate-700">
-                    Numéro de Téléphone <span className="text-[#053229]">*</span>
+                    Numéro de Téléphone <span className="text-[#0052A3]">*</span>
                   </label>
                   <input
                     type="tel"
                     required
+                    maxLength={25}
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="+41 79 000 00 00"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#053229] focus:ring-2 focus:ring-[#053229]/15 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none"
                   />
                 </div>
 
@@ -123,27 +125,28 @@ Merci pour votre retour rapide !`;
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <label className="text-xs font-sans font-bold text-slate-700 flex items-center gap-1">
-                      <MapPin size={12} className="text-[#053229]" />
+                      <MapPin size={12} className="text-[#0052A3]" />
                       <span>Commune</span>
                     </label>
                     <input
                       type="text"
+                      maxLength={60}
                       value={formData.commune}
                       onChange={(e) => setFormData({ ...formData, commune: e.target.value })}
                       placeholder="ex. Genève, Nyon..."
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#053229] focus:ring-2 focus:ring-[#053229]/15 transition-all outline-none"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none"
                     />
                   </div>
 
                   <div className="space-y-1">
                     <label className="text-xs font-sans font-bold text-slate-700 flex items-center gap-1">
-                      <Building size={12} className="text-[#053229]" />
+                      <Building size={12} className="text-[#0052A3]" />
                       <span>Étage (Max 10e)</span>
                     </label>
                     <select
                       value={formData.floor}
                       onChange={(e) => setFormData({ ...formData, floor: e.target.value })}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#053229] focus:ring-2 focus:ring-[#053229]/15 transition-all outline-none cursor-pointer"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none cursor-pointer"
                     >
                       <option value="Rez-de-chaussée">Rez-de-chaussée</option>
                       <option value="1er étage">1er étage</option>
@@ -167,10 +170,11 @@ Merci pour votre retour rapide !`;
                   </label>
                   <textarea
                     rows={2}
+                    maxLength={400}
                     value={formData.details}
                     onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                     placeholder="ex. Canapé d'angle, baies vitrées, cuisine, 15 cartons..."
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-900 text-sm focus:bg-white focus:border-[#053229] focus:ring-2 focus:ring-[#053229]/15 transition-all outline-none resize-none"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-slate-900 text-sm focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none resize-none"
                   />
                 </div>
 
@@ -181,10 +185,11 @@ Merci pour votre retour rapide !`;
                   </label>
                   <input
                     type="text"
+                    maxLength={50}
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                     placeholder="ex. Vendredi prochain ou Urgent"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#053229] focus:ring-2 focus:ring-[#053229]/15 transition-all outline-none"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-sm focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none"
                   />
                 </div>
               </div>

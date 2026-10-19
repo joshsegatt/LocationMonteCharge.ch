@@ -22,7 +22,7 @@ const faqs: FaqItem[] = [
   {
     category: "Législation & Voirie",
     question: "L'autorisation de stationnement sur le domaine public (voirie) est-elle prise en charge ?",
-    answer: "Oui, à 100%. BatiMove Sàrl prend en charge toutes les formalités officielles d'autorisation d'occupation du domaine public auprès du Service de l'espace public (SEP) de la Ville de Genève ainsi que des municipalités vaudoises (Lausanne, Nyon, Morges, etc.). Nous installons également le balisage de sécurité obligatoire (panneaux et cônes homologués)."
+    answer: "BatiMove Sàrl se charge de préparer et déposer les dossiers administratifs d'autorisation d'occupation du domaine public auprès du Service de l'espace public (SEP) de la Ville de Genève ainsi que des municipalités vaudoises (Lausanne, Nyon, Morges, etc.). Nous mettons également en place le balisage de sécurité conforme (panneaux et cônes homologués)."
   },
   {
     category: "Appartements & Particuliers",
@@ -32,12 +32,12 @@ const faqs: FaqItem[] = [
   {
     category: "Entreprise & Synergie",
     question: "Quelle est la relation entre ce site et l'entreprise BatiMove Sàrl ?",
-    answer: "Ce service spécialisé de monte-charge est opéré directement par BatiMove Sàrl (CHE-143.091.230), entreprise suisse de référence basée Rue De-Monthoux 64 à Genève, également accessible sur batimove.ch. Nous disposons d'une assurance Responsabilité Civile professionnelle entreprise de 5 millions de francs suisses garantissant chaque opération."
+    answer: "Ce service spécialisé de monte-charge est opéré directement par BatiMove Sàrl (CHE-143.091.230), entreprise suisse de référence basée Rue De-Monthoux 64 à Genève, également accessible sur batimove.ch. Nous disposons d'une assurance Responsabilité Civile professionnelle entreprise jusqu'à 5 millions de francs suisses garantissant chaque opération."
   },
   {
     category: "Sécurité & Personnel",
     question: "Le technicien opérateur est-il obligatoirement inclus avec la location ?",
-    answer: "Oui, un opérateur qualifié et formé aux normes suisses SUVA est obligatoirement fourni avec la machine. Il s'occupe de la mise à niveau, du déploiement de l'échelle télescopique, du chargement sécurisé sur le plateau et du pilotage des commandes pour une sécurité totale des biens et des personnes."
+    answer: "Oui, un opérateur qualifié formé aux prescriptions de sécurité SUVA accompagne systématiquement la machine. Il effectue la stabilisation sur vérins, le déploiement de l'échelle télescopique et le pilotage des commandes dans le respect des règles de sécurité et des conditions météorologiques."
   }
 ];
 
@@ -54,10 +54,9 @@ export default function FaqSection({ onOpenQuoteModal }: { onOpenQuoteModal?: ()
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-          <div className="inline-flex items-center justify-center gap-2 text-[#0052A3] text-xs sm:text-sm font-bold uppercase tracking-widest mb-3 text-center">
-            <HelpCircle size={15} className="shrink-0" />
-            <span>Foire Aux Questions • FAQ Suisse</span>
-          </div>
+          <p className="text-[#0052A3] text-xs sm:text-sm font-bold uppercase tracking-widest mb-3 text-center font-sans">
+            Foire Aux Questions • FAQ Suisse
+          </p>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight leading-tight mb-4">
             Tout Savoir Sur La <br className="hidden sm:block" />
             <span className="text-[#0052A3]">Location De Monte-Charge</span>

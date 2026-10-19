@@ -23,7 +23,7 @@ async function runAudit() {
     page.on('pageerror', err => consoleErrors.push(err.message));
 
     await page.setViewport({ width: vp.width, height: vp.height });
-    await page.goto('http://localhost:3001/', { waitUntil: 'networkidle2' });
+    await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
 
     const metrics = await page.evaluate(() => {
       const docW = document.documentElement.scrollWidth;

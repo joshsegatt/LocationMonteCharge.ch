@@ -6,6 +6,7 @@ import { MCLogo } from './components/MCLogo';
 import QuickQuoteDrawer from './components/QuickQuoteDrawer';
 import WhatsAppWidget from './components/WhatsAppWidget';
 import ImageZoomModal from './components/ImageZoomModal';
+import { regionalZones } from './data/regionalZones';
 
 const ContactPage = lazy(() => import('./components/ContactPage'));
 const WorkShowcase = lazy(() => import('./components/WorkShowcase'));
@@ -15,12 +16,31 @@ const AboutOverviewV2 = lazy(() => import('./components/AboutOverviewV2'));
 const StatsBannerV2 = lazy(() => import('./components/StatsBannerV2'));
 const LocalSeoZones = lazy(() => import('./components/LocalSeoZones'));
 const FaqSection = lazy(() => import('./components/FaqSection'));
+const RegionalLandingPage = lazy(() => import('./components/RegionalLandingPage'));
+
+const getInitialPage = (): string => {
+  if (typeof window === 'undefined') return 'home';
+  const path = window.location.pathname.replace(/^\//, '').toLowerCase();
+  if (path === 'contact') return 'contact';
+  if (path && regionalZones[path]) return path;
+  return 'home';
+};
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'contact'>('home');
+  const [currentPage, setCurrentPage] = useState<string>(getInitialPage);
   const [activeModal, setActiveModal] = useState<'mentions' | 'security' | null>(null);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+
+  // Signal custom refined preloader that the application is ready
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const timer = setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('bm-app-ready'));
+      }, 450);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Lenis Luxury Inertia Smooth Scroll Engine
   useEffect(() => {
@@ -52,19 +72,51 @@ export default function App() {
   // Browser History Navigation (Back / Forward)
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname;
-      setCurrentPage(path === '/contact' ? 'contact' : 'home');
+      const path = window.location.pathname.replace(/^\//, '').toLowerCase();
+      if (path === 'contact') {
+        setCurrentPage('contact');
+      } else if (path && regionalZones[path]) {
+        setCurrentPage(path);
+      } else {
+        setCurrentPage('home');
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigateTo = (page: 'home' | 'contact') => {
-    const url = page === 'home' ? '/' : '/contact';
+  // Metadata update for main pages
+  useEffect(() => {
+    if (currentPage === 'home') {
+      document.title = "Monte-Charge Genève & Vaud | BatiMove Sàrl dès 150 CHF/h";
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute('content', "Location monte-meuble et monte-charge avec opérateur qualifié à Genève et Vaud. Jusqu'au 10ᵉ étage (33m, 400kg). Intervention express 7j/7 dès 150 CHF/h.");
+      }
+    } else if (currentPage === 'contact') {
+      document.title = "Demande de Devis Monte-Charge | Genève & Vaud | BatiMove";
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute('content', "Contactez BatiMove Sàrl pour votre réservation de monte-meuble ou monte-charge à Genève et Vaud. Devis gratuit et intervention rapide.");
+      }
+    }
+  }, [currentPage]);
+
+  const navigateTo = (page: string) => {
+    let url = '/';
+    if (page === 'contact') {
+      url = '/contact';
+    } else if (page === 'home') {
+      url = '/';
+    } else if (regionalZones[page]) {
+      url = `/${page}`;
+    }
     window.history.pushState({}, '', url);
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const isRegional = Boolean(regionalZones[currentPage]);
 
   return (
     <div className="bg-[#F1F5F8] text-slate-900 min-h-screen selection:bg-[#0052A3] selection:text-white">
@@ -76,8 +128,11 @@ export default function App() {
         {currentPage === 'home' ? (
           <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col">
             
-            <Suspense fallback={<div className="h-screen bg-slate-900 animate-pulse" />}>
-              <HeroV2 onOpenQuoteModal={() => setIsQuoteModalOpen(true)} />
+            <Suspense fallback={<div className="h-screen bg-white animate-pulse" />}>
+              <HeroV2 
+                onOpenQuoteModal={() => setIsQuoteModalOpen(true)} 
+                onImageClick={(src) => setSelectedImg(src)}
+              />
             </Suspense>
 
             <Suspense fallback={<div className="h-64 bg-[#F1F5F8] animate-pulse" />}>
@@ -96,206 +151,344 @@ export default function App() {
             </Suspense>
 
             <Suspense fallback={<div className="h-96 bg-[#F1F5F8] animate-pulse" />}>
-              <LocalSeoZones onOpenQuoteModal={() => setIsQuoteModalOpen(true)} />
+              <LocalSeoZones onOpenQuoteModal={() => setIsQuoteModalOpen(true)} navigateTo={navigateTo} />
             </Suspense>
 
             <Suspense fallback={<div className="h-96 bg-[#F1F5F8] animate-pulse" />}>
               <FaqSection onOpenQuoteModal={() => setIsQuoteModalOpen(true)} />
             </Suspense>
 
-            {/* REFINED SWISS ENTERPRISE FOOTER */}
-            <footer className="py-14 sm:py-16 border-t border-white/10 bg-[#071326] text-white">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-                {/* Main Footer Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 pb-12 border-b border-white/10">
-                  
-                  {/* Col 1: Identity & Official Registry */}
-                  <div className="space-y-4">
-                    <div 
-                      className="flex items-center gap-2.5 cursor-pointer"
-                      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                    >
-                      <MCLogo size={34} />
-                      <div className="flex flex-col">
-                        <span className="text-lg font-display font-bold tracking-tight uppercase text-white leading-none">
-                          Monte Charge
-                        </span>
-                        <span className="text-[10px] font-bold tracking-wider text-[#38BDF8] uppercase mt-1 leading-none">
-                          Genève • BatiMove Sàrl
-                        </span>
-                      </div>
-                    </div>
-                    <p className="text-xs text-slate-300 leading-relaxed font-normal">
-                      Spécialiste du levage télescopique par façade jusqu'au 10ᵉ étage. Sécurisation complète des accès difficiles dans les cantons de Genève et Vaud.
-                    </p>
-                    <div className="pt-0.5">
-                      <a 
-                        href="https://batimove.ch" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="inline-flex items-center gap-1.5 text-xs text-[#38BDF8] hover:underline font-semibold"
-                      >
-                        <span>Groupe BatiMove Sàrl (batimove.ch)</span>
-                        <span>↗</span>
-                      </a>
-                    </div>
-                    <div className="text-[11px] text-slate-400 font-mono">
-                      IDE / UID : <span className="text-white font-semibold">CHE-143.091.230</span>
-                    </div>
-                  </div>
-
-                  {/* Col 2: Active Navigation */}
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
-                      Navigation
-                    </h4>
-                    <ul className="space-y-2.5 text-xs text-slate-300 font-medium">
-                      <li>
-                        <button 
-                          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} 
-                          className="hover:text-white transition-colors cursor-pointer"
-                        >
-                          Accueil
-                        </button>
-                      </li>
-                      <li>
-                        <a 
-                          href="#about" 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                          className="hover:text-white transition-colors cursor-pointer"
-                        >
-                          À propos & Flotte
-                        </a>
-                      </li>
-                      <li>
-                        <a 
-                          href="#realisations" 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            document.getElementById('realisations')?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                          className="hover:text-white transition-colors cursor-pointer"
-                        >
-                          Galerie des Réalisations
-                        </a>
-                      </li>
-                      <li>
-                        <a 
-                          href="#faq" 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                          className="hover:text-white transition-colors cursor-pointer"
-                        >
-                          Questions Fréquentes (FAQ)
-                        </a>
-                      </li>
-                      <li>
-                        <button 
-                          onClick={() => navigateTo('contact')} 
-                          className="hover:text-[#38BDF8] text-white transition-colors cursor-pointer font-bold"
-                        >
-                          Demande d'Intervention & Devis
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Col 3: Compliance & Security */}
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
-                      Conformité & Sécurité
-                    </h4>
-                    <ul className="space-y-2.5 text-xs text-slate-300 font-medium">
-                      <li>
-                        <button 
-                          onClick={() => setActiveModal('security')} 
-                          className="hover:text-white transition-colors cursor-pointer text-left"
-                        >
-                          Normes de Sécurité SUVA
-                        </button>
-                      </li>
-                      <li>
-                        <button 
-                          onClick={() => setActiveModal('mentions')} 
-                          className="hover:text-white transition-colors cursor-pointer text-left"
-                        >
-                          Mentions Légales & Registre
-                        </button>
-                      </li>
-                      <li className="text-[11px] text-slate-400 pt-1">
-                        Assurance RC professionnelle : <strong className="text-white font-semibold">5'000'000 CHF</strong>
-                      </li>
-                      <li className="text-[11px] text-slate-400">
-                        Autorisations voirie & balisage inclus
-                      </li>
-                    </ul>
-                  </div>
-
-                  {/* Col 4: Direct Contacts */}
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
-                      Assistance Directe
-                    </h4>
-                    <div className="space-y-3 text-xs">
-                      <a 
-                        href="tel:0800825925" 
-                        className="flex items-center gap-2 text-white hover:text-[#38BDF8] transition-colors font-bold"
-                      >
-                        <span className="w-2 h-2 rounded-full bg-[#38BDF8]" />
-                        <span>0800 825 925 (Gratuit)</span>
-                      </a>
-                      <a 
-                        href="https://wa.me/41798896406" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
-                      >
-                        <span>WhatsApp : 079 889 64 06</span>
-                      </a>
-                      <a 
-                        href="mailto:info@batimove.ch" 
-                        className="block text-slate-300 hover:text-white transition-colors"
-                      >
-                        Email : info@batimove.ch
-                      </a>
-                      <p className="text-[11px] text-slate-400 pt-1">
-                        Rue De-Monthoux 64, 1201 Genève
-                      </p>
-                    </div>
-                  </div>
-
-                </div>
-
-                {/* Bottom Bar: Copyright & Author Credit */}
-                <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 pb-12 sm:pb-2">
-                  <p>© 2026 Monte-Charge Suisse • BatiMove Sàrl. Tous droits réservés.</p>
-                  
-                  <a 
-                    href="https://joshsegatt.com" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-all group backdrop-blur-md sm:mr-24"
-                  >
-                    <span>Made with</span>
-                    <span className="text-[#E10600]">❤️</span>
-                    <span>by</span>
-                    <span className="text-white font-bold group-hover:text-[#38BDF8] transition-colors">joshsegatt</span>
-                  </a>
-                </div>
-              </div>
-            </footer>
           </motion.div>
-        ) : (
+        ) : currentPage === 'contact' ? (
           <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-[#0052A3] animate-pulse">Chargement de la page de contact...</div>}>
             <ContactPage key="contact" navigateTo={navigateTo} />
           </Suspense>
-        )}
+        ) : isRegional ? (
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-[#0052A3] animate-pulse">Chargement de la zone régionale...</div>}>
+            <RegionalLandingPage
+              key={currentPage}
+              zone={regionalZones[currentPage]}
+              onOpenQuoteModal={() => setIsQuoteModalOpen(true)}
+              onImageClick={(src) => setSelectedImg(src)}
+              navigateTo={navigateTo}
+            />
+          </Suspense>
+        ) : null}
       </AnimatePresence>
+
+      {/* REFINED SWISS ENTERPRISE FOOTER (Shared across Home & All Regional Landing Pages) */}
+      {currentPage !== 'contact' && (
+        <footer className="py-14 sm:py-16 border-t border-white/10 bg-[#071326] text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+            {/* Main Footer Grid: 5 columns */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6 pb-12 border-b border-white/10">
+              
+              {/* Col 1: Identity & Official Registry */}
+              <div className="space-y-4 lg:col-span-1">
+                <div 
+                  className="flex items-center gap-2.5 cursor-pointer"
+                  onClick={() => {
+                    if (currentPage === 'home') {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                      navigateTo('home');
+                    }
+                  }}
+                >
+                  <MCLogo size={34} />
+                  <div className="flex flex-col">
+                    <span className="text-lg font-display font-bold tracking-tight uppercase text-white leading-none">
+                      Monte Charge
+                    </span>
+                    <span className="text-[10px] font-bold tracking-wider text-[#38BDF8] uppercase mt-1 leading-none">
+                      Genève • BatiMove Sàrl
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed font-normal">
+                  Spécialiste du levage télescopique par façade jusqu'au 10ᵉ étage. Sécurisation complète des accès difficiles dans les cantons de Genève et Vaud.
+                </p>
+                <div className="pt-0.5">
+                  <a 
+                    href="https://batimove.ch" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="inline-flex items-center gap-1.5 text-xs text-[#38BDF8] hover:underline font-semibold"
+                  >
+                    <span>Groupe BatiMove Sàrl (batimove.ch)</span>
+                    <span>↗</span>
+                  </a>
+                </div>
+                <div className="text-[11px] text-slate-400 font-mono">
+                  IDE / UID : <span className="text-white font-semibold">CHE-143.091.230</span>
+                </div>
+              </div>
+
+              {/* Col 2: Active Navigation */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
+                  Navigation
+                </h4>
+                <ul className="space-y-2.5 text-xs text-slate-300 font-medium">
+                  <li>
+                    <button 
+                      onClick={() => {
+                        if (currentPage === 'home') {
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                          navigateTo('home');
+                        }
+                      }} 
+                      className="hover:text-white transition-colors cursor-pointer"
+                    >
+                      Accueil
+                    </button>
+                  </li>
+                  <li>
+                    <a 
+                      href="#about" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage !== 'home') {
+                          navigateTo('home');
+                          setTimeout(() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' }), 150);
+                        } else {
+                          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="hover:text-white transition-colors cursor-pointer"
+                    >
+                      À propos &amp; Flotte
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="#realisations" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage !== 'home') {
+                          navigateTo('home');
+                          setTimeout(() => document.getElementById('realisations')?.scrollIntoView({ behavior: 'smooth' }), 150);
+                        } else {
+                          document.getElementById('realisations')?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="hover:text-white transition-colors cursor-pointer"
+                    >
+                      Galerie des Réalisations
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="#faq" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage !== 'home') {
+                          navigateTo('home');
+                          setTimeout(() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' }), 150);
+                        } else {
+                          document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="hover:text-white transition-colors cursor-pointer"
+                    >
+                      Questions Fréquentes (FAQ)
+                    </a>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => navigateTo('contact')} 
+                      className="hover:text-[#38BDF8] text-white transition-colors cursor-pointer font-bold"
+                    >
+                      Demande d'Intervention
+                    </button>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Col 3: Canton de Vaud Hubs */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
+                  Canton de Vaud
+                </h4>
+                <ul className="space-y-2 text-xs text-slate-300 font-medium">
+                  <li>
+                    <a 
+                      href="/lausanne" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('lausanne'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Lausanne</span>
+                      <span className="block text-[11px] text-slate-400">Pully, Renens, Lutry</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/nyon" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('nyon'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Nyon &amp; La Côte</span>
+                      <span className="block text-[11px] text-slate-400">Gland, Rolle, Coppet</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/morges" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('morges'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Morges</span>
+                      <span className="block text-[11px] text-slate-400">Tolochenaz, Saint-Prex</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/vevey" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('vevey'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Vevey &amp; Montreux</span>
+                      <span className="block text-[11px] text-slate-400">Riviera, Tour-de-Peilz</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Col 4: Canton de Genève Hubs */}
+              <div>
+                <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-4">
+                  Canton de Genève
+                </h4>
+                <ul className="space-y-2 text-xs text-slate-300 font-medium">
+                  <li>
+                    <a 
+                      href="/geneve" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('geneve'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Genève Centre</span>
+                      <span className="block text-[11px] text-slate-400">Vieille-Ville, Servette</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/carouge" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('carouge'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Carouge &amp; Lancy</span>
+                      <span className="block text-[11px] text-slate-400">Acacias, Rondeau</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/plainpalais" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('plainpalais'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Plainpalais &amp; Jonction</span>
+                      <span className="block text-[11px] text-slate-400">Bains, Philosophes</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/eaux-vives" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('eaux-vives'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Eaux-Vives &amp; Champel</span>
+                      <span className="block text-[11px] text-slate-400">Cologny, Malagnou</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a 
+                      href="/meyrin" 
+                      onClick={(e) => { e.preventDefault(); navigateTo('meyrin'); }} 
+                      className="hover:text-white transition-colors block"
+                    >
+                      <span className="font-semibold text-white">Meyrin &amp; Vernier</span>
+                      <span className="block text-[11px] text-slate-400">Avanchets, Satigny</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Col 5: Compliance & Direct Contact */}
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-[#38BDF8] mb-3">
+                    Sécurité &amp; Légal
+                  </h4>
+                  <ul className="space-y-1.5 text-xs text-slate-300 font-medium">
+                    <li>
+                      <button 
+                        onClick={() => setActiveModal('security')} 
+                        className="hover:text-white transition-colors cursor-pointer text-left"
+                      >
+                        Normes SUVA &amp; Sécurité
+                      </button>
+                    </li>
+                    <li>
+                      <button 
+                        onClick={() => setActiveModal('mentions')} 
+                        className="hover:text-white transition-colors cursor-pointer text-left"
+                      >
+                        Mentions Légales &amp; Registre
+                      </button>
+                    </li>
+                    <li className="text-[11px] text-slate-400 pt-0.5">
+                      RC Pro : <strong className="text-white font-semibold">5'000'000 CHF</strong>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-2 border-t border-white/10 space-y-2 text-xs">
+                  <a 
+                    href="tel:0800825925" 
+                    className="flex items-center gap-2 text-white hover:text-[#38BDF8] transition-colors font-bold"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-[#38BDF8]" />
+                    <span>0800 825 925 (Gratuit)</span>
+                  </a>
+                  <a 
+                    href="https://wa.me/41798896406" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
+                  >
+                    <span>WhatsApp : 079 889 64 06</span>
+                  </a>
+                  <a 
+                    href="mailto:info@batimove.ch" 
+                    className="block text-slate-300 hover:text-white transition-colors"
+                  >
+                    Email : info@batimove.ch
+                  </a>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Bottom Bar: Copyright & Author Credit */}
+            <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 pb-12 sm:pb-2">
+              <p>© 2026 Monte-Charge Suisse • BatiMove Sàrl. Tous droits réservés.</p>
+              
+              <a 
+                href="https://joshsegatt.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-all group backdrop-blur-md sm:mr-24"
+              >
+                <span>Made with</span>
+                <span className="text-[#E10600]">❤️</span>
+                <span>by</span>
+                <span className="text-white font-bold group-hover:text-[#38BDF8] transition-colors">joshsegatt</span>
+              </a>
+            </div>
+          </div>
+        </footer>
+      )}
 
       {/* LEGAL MODALS */}
       <AnimatePresence>

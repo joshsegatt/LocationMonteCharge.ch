@@ -22,7 +22,7 @@ export default function ImageZoomModal({ src, onClose }: { src: string; onClose:
         <button 
           onClick={onClose}
           aria-label="Fermer l'image"
-          className="absolute top-6 right-6 w-12 h-12 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white hover:bg-[#053229] transition-colors cursor-pointer"
+          className="absolute top-6 right-6 w-12 h-12 rounded-full bg-black/60 border border-white/20 flex items-center justify-center text-white hover:bg-[#0052A3] transition-colors cursor-pointer"
         >
           <X size={24} />
         </button>

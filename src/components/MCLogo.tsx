@@ -11,7 +11,7 @@ export const MCLogo = ({ size = 36, className = "" }: { size?: number; className
     viewBox="0 0 100 100"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={cn("filter drop-shadow-[0_2px_8px_rgba(5,50,41,0.25)]", className)}
+    className={cn("filter drop-shadow-[0_2px_8px_rgba(0,82,163,0.25)]", className)}
     aria-label="Logo Monte-Charge BatiMove"
     role="img"
   >

@@ -17,7 +17,7 @@ export default function StatsBannerV2() {
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-white leading-[1.1] mb-6 tracking-tight">
             Précision De Levage, <br />
-            <span className="text-[#38BDF8]">Sans Limite D'Accès</span>
+            <span className="text-[#38BDF8]">Pour Accès Complexes</span>
           </h2>
 
           <p className="text-slate-200/90 text-sm sm:text-base leading-relaxed mb-12 max-w-xl font-normal">
@@ -60,13 +60,13 @@ export default function StatsBannerV2() {
             <div className="text-left border-l border-white/15 pl-4 sm:pl-6 group">
               <div className="flex items-center gap-2 mb-2 text-[#38BDF8]">
                 <ShieldCheck size={20} strokeWidth={1.75} />
-                <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-300">Garantie</span>
+                <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-300">Assurance</span>
               </div>
               <div className="text-3xl sm:text-4xl font-display font-black text-white tracking-tight">
                 5<span className="text-lg sm:text-xl font-bold text-[#38BDF8] ml-0.5">M</span>
               </div>
               <div className="text-[11px] sm:text-xs text-slate-300 mt-1 font-normal">
-                CHF assurance RC
+                CHF RC Pro max
               </div>
             </div>
 

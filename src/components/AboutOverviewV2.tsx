@@ -68,11 +68,6 @@ export default function AboutOverviewV2({ onContactClick }: AboutOverviewProps) 
                 {/* Subtle gradient vignette for readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/35 pointer-events-none" />
 
-                {/* Live Badge Top */}
-                <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-950/75 backdrop-blur-md text-[10px] sm:text-xs font-semibold text-white tracking-wide border border-white/15 pointer-events-none shadow-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#E10600] animate-pulse" />
-                  <span>En action</span>
-                </div>
 
                 {/* Paused state overlay */}
                 {!isPlaying && (
@@ -132,9 +127,9 @@ export default function AboutOverviewV2({ onContactClick }: AboutOverviewProps) 
                   <Clock size={28} className="text-[#0052A3]" />
                 </div>
                 <div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 mb-1">Conformité SUVA & Voirie Incluse</h4>
+                  <h4 className="text-base sm:text-lg font-bold text-slate-900 mb-1">Conformité SUVA & Démarches de Voirie</h4>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    Opérateurs qualifiés, assurance RC 5 millions CHF et gestion intégrale des autorisations de voirie auprès des municipalités.
+                    Opérateurs qualifiés formés aux normes SUVA, couverture RC professionnelle jusqu'à CHF 5'000'000 et accompagnement pour l'obtention des autorisations de voirie communale.
                   </p>
                 </div>
               </div>

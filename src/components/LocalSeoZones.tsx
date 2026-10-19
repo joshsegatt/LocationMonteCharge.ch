@@ -11,8 +11,8 @@ interface ZoneHub {
 const zones: ZoneHub[] = [
   {
     region: "Canton de Genève",
-    eta: "15 à 30 min",
-    description: "Intervention express en hypercentre, vieilles rues pavées et cours intérieures. Autorisation voirie SEP et balisage de sécurité gérés à 100%.",
+    eta: "Intervention réactive",
+    description: "Intervention sur rendez-vous ou urgence en hypercentre, vieilles rues pavées et cours intérieures. Démarches de voirie SEP et balisage de sécurité réglementaire assurés.",
     cities: [
       "Genève Centre", "Carouge", "Eaux-Vives",
       "Plainpalais", "Champel", "Servette",
@@ -22,8 +22,8 @@ const zones: ZoneHub[] = [
   },
   {
     region: "Canton de Vaud & La Côte",
-    eta: "30 à 45 min",
-    description: "Couverture continue de La Côte à la Riviera. Levage télescopique pour copropriétés, appartements en attique et chantiers.",
+    eta: "Intervention réactive",
+    description: "Couverture continue de La Côte à la Riviera. Levage télescopique pour copropriétés, appartements en attique, villas et chantiers.",
     cities: [
       "Nyon", "Morges", "Lausanne",
       "Gland", "Rolle", "Renens",
@@ -33,7 +33,32 @@ const zones: ZoneHub[] = [
   }
 ];
 
-export default function LocalSeoZones({ onOpenQuoteModal }: { onOpenQuoteModal?: () => void }) {
+interface LocalSeoZonesProps {
+  onOpenQuoteModal?: () => void;
+  navigateTo?: (page: string) => void;
+}
+
+const cityRouteMap: Record<string, string> = {
+  "Genève Centre": "geneve",
+  "Carouge": "carouge",
+  "Plainpalais": "plainpalais",
+  "Eaux-Vives": "eaux-vives",
+  "Champel": "eaux-vives",
+  "Cologny": "eaux-vives",
+  "Meyrin": "meyrin",
+  "Vernier": "meyrin",
+  "Lausanne": "lausanne",
+  "Nyon": "nyon",
+  "Gland": "nyon",
+  "Coppet": "nyon",
+  "Morges": "morges",
+  "Rolle": "morges",
+  "Saint-Prex": "morges",
+  "Vevey": "vevey",
+  "Montreux": "vevey",
+};
+
+export default function LocalSeoZones({ onOpenQuoteModal, navigateTo }: LocalSeoZonesProps) {
   return (
     <section id="zones" className="py-12 md:py-16 bg-[#F1F5F8] border-t border-slate-200/80 relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
@@ -44,7 +69,7 @@ export default function LocalSeoZones({ onOpenQuoteModal }: { onOpenQuoteModal?:
             Zones d'Intervention <span className="text-[#0052A3]">— Genève & Vaud</span>
           </h2>
           <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-            Déploiement direct dans votre commune. Passage par fenêtre ou balcon jusqu'au 10ᵉ étage avec opérateur certifié SUVA et permis voirie inclus.
+            Déploiement direct dans votre commune. Passage par fenêtre ou balcon jusqu'au 10ᵉ étage avec opérateur qualifié formé aux normes SUVA et démarches de voirie prises en charge.
           </p>
         </div>
 
@@ -63,7 +88,7 @@ export default function LocalSeoZones({ onOpenQuoteModal }: { onOpenQuoteModal?:
                   </h3>
                   <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1.5">
                     <Clock size={13} className="shrink-0" />
-                    <span>Dès {zone.eta}</span>
+                    <span>{zone.eta}</span>
                   </span>
                 </div>
 
@@ -71,21 +96,35 @@ export default function LocalSeoZones({ onOpenQuoteModal }: { onOpenQuoteModal?:
                   {zone.description}
                 </p>
 
-                {/* Communes Grid - 3 Columns Clean Typographic List (No bubbles) */}
+                {/* Communes Grid - 3 Columns Clean Typographic List */}
                 <div>
                   <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">
                     Communes desservies au tarif local
                   </div>
                   <div className="grid grid-cols-3 gap-x-2 gap-y-2 text-xs">
-                    {zone.cities.map((city, cIdx) => (
-                      <div 
-                        key={cIdx} 
-                        className="flex items-center gap-1.5 text-slate-700 hover:text-[#0052A3] transition-colors"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#0052A3]/60 shrink-0" />
-                        <span className="truncate font-medium">{city}</span>
-                      </div>
-                    ))}
+                    {zone.cities.map((city, cIdx) => {
+                      const route = cityRouteMap[city];
+                      return (
+                        <div 
+                          key={cIdx} 
+                          className="flex items-center gap-1.5 text-slate-700"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#0052A3]/60 shrink-0" />
+                          {route && navigateTo ? (
+                            <button
+                              type="button"
+                              onClick={() => navigateTo(route)}
+                              className="truncate font-medium text-left hover:text-[#0052A3] hover:underline cursor-pointer transition-colors"
+                              title={`Accéder à la page dédiée Location Monte-Meuble ${city}`}
+                            >
+                              {city}
+                            </button>
+                          ) : (
+                            <span className="truncate font-medium">{city}</span>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -94,10 +133,10 @@ export default function LocalSeoZones({ onOpenQuoteModal }: { onOpenQuoteModal?:
               <div className="pt-4 mt-5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
                 <span className="flex items-center gap-1.5 text-slate-600">
                   <ShieldCheck size={14} className="text-[#0052A3]" />
-                  Assurance RC 5M CHF
+                  Assurance RC Pro jusqu'à 5M CHF
                 </span>
                 <span className="text-[#0052A3] font-semibold">
-                  Voirie municipale incluse
+                  Démarches voirie prises en charge
                 </span>
               </div>
             </div>
@@ -111,7 +150,7 @@ export default function LocalSeoZones({ onOpenQuoteModal }: { onOpenQuoteModal?:
               Votre meuble ne passe pas dans la cage d'escalier ?
             </h4>
             <p className="text-xs text-slate-300">
-              Intervention d'urgence disponible aujourd'hui à Genève et dans le canton de Vaud.
+              Intervention sur réservation ou créneau d'urgence selon planning à Genève et Vaud.
             </p>
           </div>
 

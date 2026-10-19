@@ -4,7 +4,7 @@ import { MCLogo } from './MCLogo';
 import { cn } from '../lib/utils';
 
 interface NavProps {
-  navigateTo: (page: 'home' | 'contact') => void;
+  navigateTo: (page: string) => void;
   currentPage: string;
 }
 
@@ -61,8 +61,8 @@ export default function NavV2({ navigateTo, currentPage }: NavProps) {
     <header className={cn(
       "fixed top-0 left-0 right-0 z-[1000] transition-all duration-300",
       scrolled 
-        ? "bg-[#0A192F]/95 backdrop-blur-md border-b border-white/10 shadow-xl py-3" 
-        : "bg-transparent py-4 sm:py-6"
+        ? "bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-[0_4px_20px_rgba(10,25,47,0.05)] py-3" 
+        : "bg-white/60 backdrop-blur-xs border-b border-slate-200/40 py-3.5 sm:py-4"
     )}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 flex items-center justify-between">
         
@@ -79,11 +79,11 @@ export default function NavV2({ navigateTo, currentPage }: NavProps) {
         >
           <MCLogo size={32} className="shrink-0" />
           <div className="flex flex-col">
-            <span className="text-lg sm:text-xl font-bold tracking-tight uppercase font-display leading-none text-white">
+            <span className="text-lg sm:text-xl font-bold tracking-tight uppercase font-display leading-none text-slate-950">
               Monte Charge
             </span>
-            <span className="text-[10px] font-semibold tracking-wide uppercase mt-0.5 leading-none text-[#38BDF8]">
-              Genève
+            <span className="text-[10px] font-bold tracking-wider uppercase mt-0.5 leading-none text-[#0052A3]">
+              Genève • BatiMove
             </span>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function NavV2({ navigateTo, currentPage }: NavProps) {
               key={link.label}
               href={link.href || '#'}
               onClick={(e) => handleLinkClick(e, link)}
-              className="text-xs lg:text-sm font-sans font-medium transition-colors text-slate-300 hover:text-white cursor-pointer"
+              className="text-xs lg:text-sm font-sans font-medium transition-colors text-slate-600 hover:text-slate-950 cursor-pointer"
             >
               {link.label}
             </a>
@@ -116,7 +116,7 @@ export default function NavV2({ navigateTo, currentPage }: NavProps) {
         {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden p-2 rounded-md transition-colors text-white cursor-pointer"
+          className="md:hidden p-2 rounded-md transition-colors text-slate-900 cursor-pointer"
           aria-label="Menu"
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}

@@ -1,19 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Page Principale / Home (Genève & Vaud) -->
   <url>
     <loc>https://www.locationmontecharge.ch/</loc>
-    <lastmod>2026-10-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/" />
+    <image:image>
+      <image:loc>https://www.locationmontecharge.ch/assets/work/real-geneva-1.webp</image:loc>
+      <image:title>Monte-meuble BatiMove en action à Genève Cité Servette au 4e étage</image:title>
+      <image:caption>Intervention de levage télescopique avec camion monte-meuble et sécurisation de voirie à Genève.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.locationmontecharge.ch/assets/work/real-geneva-2.webp</image:loc>
+      <image:title>Déménagement par monte-charge et camion utilitaire à Genève et Vaud</image:title>
+      <image:caption>Flotte de monte-meubles BatiMove déployée pour déménagement en copropriété résidentielle.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.locationmontecharge.ch/assets/work/real-geneva-3.webp</image:loc>
+      <image:title>Opérateur qualifié SUVA au pupitre de commande hydraulique monte-charge</image:title>
+      <image:caption>Précision millimétrique et respect rigoureux des normes de sécurité SUVA à Genève.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.locationmontecharge.ch/assets/hero-swiss-road.webp</image:loc>
+      <image:title>Camion monte-meuble BatiMove sur route suisse avec vue sur les Alpes</image:title>
+      <image:caption>Service de location de monte-meuble et monte-charge autotracté dans les cantons de Genève et Vaud.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.locationmontecharge.ch/assets/hero-swiss-profile.webp</image:loc>
+      <image:title>Véhicule monte-meuble télescopique 33m BatiMove Sàrl</image:title>
+      <image:caption>Élévateur autotracté 500 kg pour levage par fenêtre et balcon.</image:caption>
+    </image:image>
   </url>
+
+  <!-- Hub Régional Dédié: Lausanne (Canton de Vaud) -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/lausanne</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/lausanne" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/lausanne" />
+  </url>
+
+  <!-- Hub Régional Dédié: Nyon & La Côte -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/nyon</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/nyon" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/nyon" />
+  </url>
+
+  <!-- Hub Régional Dédié: Morges & District -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/morges</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/morges" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/morges" />
+  </url>
+
+  <!-- Hub Régional Dédié: Vevey & Montreux (Riviera Vaudoise) -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/vevey</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/vevey" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/vevey" />
+  </url>
+
+  <!-- Hub Régional Dédié: Genève Centre & Hypercentre -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/geneve</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/geneve" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/geneve" />
+  </url>
+
+  <!-- Hub Régional Dédié: Carouge & Rive Gauche -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/carouge</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/carouge" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/carouge" />
+  </url>
+
+  <!-- Hub Régional Dédié: Plainpalais & Jonction -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/plainpalais</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/plainpalais" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/plainpalais" />
+  </url>
+
+  <!-- Hub Régional Dédié: Eaux-Vives & Champel -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/eaux-vives</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/eaux-vives" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/eaux-vives" />
+  </url>
+
+  <!-- Hub Régional Dédié: Meyrin & Vernier (Rive Droite) -->
+  <url>
+    <loc>https://www.locationmontecharge.ch/meyrin</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.90</priority>
+    <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/meyrin" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/meyrin" />
+  </url>
+
+  <!-- Page Contact & Devis -->
   <url>
     <loc>https://www.locationmontecharge.ch/contact</loc>
-    <lastmod>2026-10-01</lastmod>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.locationmontecharge.ch/contact" />
   </url>
+
 </urlset>

@@ -4,12 +4,32 @@ Allow: /
 Allow: /favicon*
 Allow: /assets/
 
-# Googlebot-Image specific
+# Googlebot Image Crawler
 User-agent: Googlebot-Image
+Allow: /
 Allow: /favicon*
 Allow: /assets/
+Allow: /*.webp$
+Allow: /*.jpg$
+Allow: /*.jpeg$
 Allow: /*.png$
 Allow: /*.ico$
 Allow: /*.svg$
+
+# AI Search & GEO Answer Engines (Google AI Overviews, Perplexity, OpenAI, Anthropic)
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
 
 Sitemap: https://www.locationmontecharge.ch/sitemap.xml

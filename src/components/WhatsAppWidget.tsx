@@ -90,23 +90,22 @@ export default function WhatsAppWidget() {
             }}
           >
             {/* Balloon Header */}
-            <div className="bg-[#053229] text-white p-4 flex items-center justify-between shadow-md relative overflow-hidden">
-              <div className="absolute -right-8 -top-8 w-24 h-24 bg-[#053229]/20 rounded-full blur-xl pointer-events-none" />
+            <div className="bg-[#0A192F] text-white p-4 flex items-center justify-between shadow-md relative overflow-hidden">
+              <div className="absolute -right-8 -top-8 w-24 h-24 bg-[#0052A3]/25 rounded-full blur-xl pointer-events-none" />
               
               <div className="flex items-center gap-3 relative z-10">
                 <div className="relative">
                   <div className="w-11 h-11 rounded-full bg-white/10 border border-white/20 p-1 flex items-center justify-center backdrop-blur-sm shadow-inner">
                     <MCLogo size={30} />
                   </div>
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-[#00A388] border-2 border-[#053229] rounded-full animate-pulse" />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-[#0A192F] rounded-full animate-pulse" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
                     <h3 className="font-display font-bold text-sm tracking-tight text-white leading-tight">BatiMove Suisse</h3>
-                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#00A388]/30 text-[#38D9BA] border border-[#00A388]/40 uppercase tracking-wider">Officiel</span>
                   </div>
                   <p className="text-[11px] text-white/80 font-normal flex items-center gap-1 mt-0.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#38D9BA]" /> En ligne • Réponse en ~10 min
+                    En ligne • Service client réactif
                   </p>
                 </div>
               </div>
@@ -122,9 +121,9 @@ export default function WhatsAppWidget() {
 
             {/* Balloon Body / Message Thread */}
             <div className="p-4 space-y-3 max-h-[380px] overflow-y-auto">
-              {/* Date pill */}
+              {/* Date text */}
               <div className="flex justify-center">
-                <span className="px-3 py-1 rounded-full bg-white/70 backdrop-blur-xs text-[10px] font-medium text-slate-500 shadow-2xs border border-slate-200/50">
+                <span className="text-[10px] font-medium text-slate-500">
                   Aujourd'hui
                 </span>
               </div>
@@ -163,7 +162,7 @@ export default function WhatsAppWidget() {
                       href={`https://wa.me/41798896406?text=${encodeURIComponent(chip.text)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-2 rounded-lg bg-slate-50 hover:bg-[#053229] hover:text-white border border-slate-200/80 text-slate-700 text-xs font-medium transition-all flex items-center justify-between group active:scale-[0.99] cursor-pointer"
+                      className="px-3 py-2 rounded-lg bg-slate-50 hover:bg-[#0052A3] hover:text-white border border-slate-200/80 text-slate-700 text-xs font-medium transition-all flex items-center justify-between group active:scale-[0.99] cursor-pointer"
                     >
                       <span>{chip.label}</span>
                       <ArrowUpRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-transform" />
@@ -179,12 +178,13 @@ export default function WhatsAppWidget() {
                 type="text"
                 value={userMsg}
                 onChange={(e) => setUserMsg(e.target.value)}
+                maxLength={500}
                 placeholder="Écrire un message WhatsApp..."
-                className="flex-1 px-3.5 py-2.5 rounded-full bg-slate-100 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#053229] focus:bg-white transition-all font-sans"
+                className="flex-1 px-3.5 py-2.5 rounded-full bg-slate-100 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0052A3] focus:bg-white transition-all font-sans"
               />
               <button
                 type="submit"
-                className="w-10 h-10 rounded-full bg-[#053229] hover:bg-[#084d3f] active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer shadow-sm shrink-0"
+                className="w-10 h-10 rounded-full bg-[#0052A3] hover:bg-[#004080] active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer shadow-sm shrink-0"
                 aria-label="Envoyer sur WhatsApp"
                 title="Démarrer la discussion WhatsApp"
               >

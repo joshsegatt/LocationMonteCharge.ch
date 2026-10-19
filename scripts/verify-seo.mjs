@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer';
 async function verify() {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto('http://localhost:3001/', { waitUntil: 'networkidle2' });
+  await page.goto('http://localhost:3000/', { waitUntil: 'networkidle2' });
 
   const data = await page.evaluate(() => {
     return {
