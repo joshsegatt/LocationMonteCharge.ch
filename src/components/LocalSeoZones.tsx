@@ -111,14 +111,14 @@ export default function LocalSeoZones({ onOpenQuoteModal, navigateTo }: LocalSeo
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-[#0052A3]/60 shrink-0" />
                           {route && navigateTo ? (
-                            <button
-                              type="button"
-                              onClick={() => navigateTo(route)}
+                            <a
+                              href={`/${route}`}
+                              onClick={(e) => { e.preventDefault(); navigateTo(route); }}
                               className="truncate font-medium text-left hover:text-[#0052A3] hover:underline cursor-pointer transition-colors"
                               title={`Accéder à la page dédiée Location Monte-Meuble ${city}`}
                             >
                               {city}
-                            </button>
+                            </a>
                           ) : (
                             <span className="truncate font-medium">{city}</span>
                           )}

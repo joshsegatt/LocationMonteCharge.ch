@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Phone, ArrowRight, ShieldCheck, Clock, MapPin, Maximize2, ChevronRight } from 'lucide-react';
 import { RegionalZone } from '../data/regionalZones';
+import { setPageMeta } from '../lib/seo';
 import StatsBannerV2 from './StatsBannerV2';
 import WorkShowcase from './WorkShowcase';
 import FaqSection from './FaqSection';
@@ -22,11 +23,11 @@ export default function RegionalLandingPage({
 
   // Dynamically update page title, meta description, and canonical URL on mount
   useEffect(() => {
-    document.title = zone.metaTitle;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute('content', zone.metaDescription);
-    }
+    setPageMeta({
+      title: zone.metaTitle,
+      description: zone.metaDescription,
+      path: `/${zone.slug}`,
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [zone]);
 
@@ -328,17 +329,18 @@ export default function RegionalLandingPage({
             </span>
             <div className="flex items-center gap-2 flex-wrap justify-center">
               {['lausanne', 'nyon', 'morges', 'vevey', 'geneve', 'carouge', 'plainpalais', 'eaux-vives', 'meyrin'].map((slug) => (
-                <button
+                <a
                   key={slug}
-                  onClick={() => navigateTo(slug)}
+                  href={`/${slug}`}
+                  onClick={(e) => { e.preventDefault(); navigateTo(slug); }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    slug === zone.slug 
-                      ? "bg-[#0052A3] text-white" 
+                    slug === zone.slug
+                      ? "bg-[#0052A3] text-white"
                       : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                   }`}
                 >
                   {slug.charAt(0).toUpperCase() + slug.slice(1)}
-                </button>
+                </a>
               ))}
             </div>
           </div>

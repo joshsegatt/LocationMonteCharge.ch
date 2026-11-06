@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send, ArrowUpRight, CheckCheck } from 'lucide-react';
 import { MCLogo } from './MCLogo';
+import { track } from '../lib/analytics';
 
 // --- Official WhatsApp Vector Icon ---
 const WhatsAppIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
@@ -55,6 +56,7 @@ export default function WhatsAppWidget() {
     const finalMsg = userMsg.trim() 
       ? encodeURIComponent(userMsg.trim())
       : encodeURIComponent('Bonjour BatiMove, je souhaite obtenir un devis pour une intervention monte-meuble.');
+    track('whatsapp_widget_send');
     window.open(`https://wa.me/41798896406?text=${finalMsg}`, '_blank', 'noopener,noreferrer');
     setUserMsg('');
   };

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Phone, Mail, MapPin, Send, CheckCircle2, Clock, Navigation, ExternalLink } from 'lucide-react';
 import { AppleAestheticBackdrop } from './AppleAestheticBackdrop';
+import { track } from '../lib/analytics';
 
 export default function ContactPage({ navigateTo }: { navigateTo: (page: string) => void }) {
-  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success'>('idle');
+  const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   return (
     <motion.main 
@@ -204,10 +205,14 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: string)
                             body: formData,
                             headers: { 'Accept': 'application/json' }
                           });
-                          if (res.ok) setFormStatus('success');
-                          else setFormStatus('idle');
+                          if (res.ok) {
+                            setFormStatus('success');
+                            track('lead_form_submit');
+                          } else {
+                            setFormStatus('error');
+                          }
                         } catch {
-                          setFormStatus('idle');
+                          setFormStatus('error');
                         }
                       }}
                     >
@@ -276,6 +281,12 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: string)
                           <span>{formStatus === 'sending' ? 'Envoi en cours...' : 'Transmettre le Dossier Mission'}</span>
                           <Send size={15} className={formStatus === 'sending' ? 'animate-pulse' : ''} />
                         </button>
+                        {formStatus === 'error' && (
+                          <p className="mt-2 text-xs text-[#E10600] font-semibold text-center" role="alert">
+                            L'envoi a échoué. Réessayez ou appelez-nous directement au{' '}
+                            <a href="tel:0800825925" className="underline">0800 825 925</a>.
+                          </p>
+                        )}
                       </div>
 
                     </form>
