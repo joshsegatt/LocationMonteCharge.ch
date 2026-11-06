@@ -27,15 +27,18 @@ const GA4_ID = import.meta.env.VITE_GA4_ID as string | undefined;
 const ADS_ID = (import.meta.env.VITE_GOOGLE_ADS_ID as string | undefined) || 'AW-18400207296';
 const META_PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID as string | undefined;
 
-// Ações de conversão do Google Ads (labels do send_to).
-const ADS_CONVERSION_LABELS: Record<string, string> = {
-  // "Contact": qualquer contato direto (telefone, WhatsApp)
-  call_click: 'NBeNCM6MqrMdEMDD88VE',
-  whatsapp_click: 'NBeNCM6MqrMdEMDD88VE',
-  whatsapp_widget_send: 'NBeNCM6MqrMdEMDD88VE',
-  quote_whatsapp_submit: 'NBeNCM6MqrMdEMDD88VE',
-  // "Lead - Formulaire Devis"
-  lead_form_submit: '7iQmCIrW8uQcEMDD88VE',
+// Ações de conversão do Google Ads (label do send_to + valor em CHF).
+// O valor reflete a intenção: um clique no WhatsApp/telefone ainda não é um
+// lead; o pedido de devis preenchido e o formulário valem mais. Isso ensina o
+// lance automático a priorizar contatos de verdade.
+const ADS_CONVERSIONS: Record<string, { label: string; value: number }> = {
+  // "Contact": clique em telefone/WhatsApp (valor vindo do site)
+  call_click: { label: 'NBeNCM6MqrMdEMDD88VE', value: 10 },
+  whatsapp_click: { label: 'NBeNCM6MqrMdEMDD88VE', value: 10 },
+  whatsapp_widget_send: { label: 'NBeNCM6MqrMdEMDD88VE', value: 15 },
+  quote_whatsapp_submit: { label: 'NBeNCM6MqrMdEMDD88VE', value: 25 },
+  // "Lead - Formulaire Devis" (valor fixo de 50 CHF também no painel)
+  lead_form_submit: { label: '7iQmCIrW8uQcEMDD88VE', value: 50 },
 };
 
 // "Appel (079 889 64 06)": o Google troca esse número por um de encaminhamento
@@ -100,11 +103,11 @@ export function track(event: string, params: Record<string, unknown> = {}) {
   try {
     window.gtag?.('event', event, params);
     // Google Ads conversion (send_to label) when the event maps to an action
-    const label = ADS_CONVERSION_LABELS[event];
-    if (ADS_ID && label) {
+    const conv = ADS_CONVERSIONS[event];
+    if (ADS_ID && conv) {
       window.gtag?.('event', 'conversion', {
-        send_to: `${ADS_ID}/${label}`,
-        value: 1.0,
+        send_to: `${ADS_ID}/${conv.label}`,
+        value: conv.value,
         currency: 'CHF',
       });
     }
