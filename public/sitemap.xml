@@ -6,7 +6,7 @@
   <!-- Page Principale / Home (Genève & Vaud) -->
   <url>
     <loc>https://www.locationmontecharge.ch/</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/" />
@@ -41,7 +41,7 @@
   <!-- Hub Régional Dédié: Lausanne (Canton de Vaud) -->
   <url>
     <loc>https://www.locationmontecharge.ch/lausanne</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/lausanne" />
@@ -51,7 +51,7 @@
   <!-- Hub Régional Dédié: Nyon & La Côte -->
   <url>
     <loc>https://www.locationmontecharge.ch/nyon</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/nyon" />
@@ -61,7 +61,7 @@
   <!-- Hub Régional Dédié: Morges & District -->
   <url>
     <loc>https://www.locationmontecharge.ch/morges</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/morges" />
@@ -71,7 +71,7 @@
   <!-- Hub Régional Dédié: Vevey & Montreux (Riviera Vaudoise) -->
   <url>
     <loc>https://www.locationmontecharge.ch/vevey</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/vevey" />
@@ -81,7 +81,7 @@
   <!-- Hub Régional Dédié: Genève Centre & Hypercentre -->
   <url>
     <loc>https://www.locationmontecharge.ch/geneve</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/geneve" />
@@ -91,7 +91,7 @@
   <!-- Hub Régional Dédié: Carouge & Rive Gauche -->
   <url>
     <loc>https://www.locationmontecharge.ch/carouge</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/carouge" />
@@ -101,7 +101,7 @@
   <!-- Hub Régional Dédié: Plainpalais & Jonction -->
   <url>
     <loc>https://www.locationmontecharge.ch/plainpalais</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/plainpalais" />
@@ -111,7 +111,7 @@
   <!-- Hub Régional Dédié: Eaux-Vives & Champel -->
   <url>
     <loc>https://www.locationmontecharge.ch/eaux-vives</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/eaux-vives" />
@@ -121,7 +121,7 @@
   <!-- Hub Régional Dédié: Meyrin & Vernier (Rive Droite) -->
   <url>
     <loc>https://www.locationmontecharge.ch/meyrin</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/meyrin" />
@@ -131,7 +131,7 @@
   <!-- Page Contact & Devis -->
   <url>
     <loc>https://www.locationmontecharge.ch/contact</loc>
-    <lastmod>2026-10-19</lastmod>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
     <xhtml:link rel="alternate" hreflang="fr-CH" href="https://www.locationmontecharge.ch/contact" />

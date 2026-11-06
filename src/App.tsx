@@ -7,6 +7,8 @@ import QuickQuoteDrawer from './components/QuickQuoteDrawer';
 import WhatsAppWidget from './components/WhatsAppWidget';
 import ImageZoomModal from './components/ImageZoomModal';
 import { regionalZones } from './data/regionalZones';
+import { setPageMeta, DEFAULT_META } from './lib/seo';
+import { initAnalytics, trackPageView } from './lib/analytics';
 
 const ContactPage = lazy(() => import('./components/ContactPage'));
 const WorkShowcase = lazy(() => import('./components/WorkShowcase'));
@@ -39,6 +41,19 @@ export default function App() {
         window.dispatchEvent(new CustomEvent('bm-app-ready'));
       }, 450);
       return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // Conversion tracking (Google Ads / GA4 / Meta Pixel — no-op until IDs are set)
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
+  // Normalize unknown URLs to "/" so soft-404 paths don't keep a bad address
+  useEffect(() => {
+    const path = window.location.pathname.replace(/^\//, '').toLowerCase();
+    if (path && path !== 'contact' && !regionalZones[path]) {
+      window.history.replaceState({}, '', '/');
     }
   }, []);
 
@@ -85,21 +100,19 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Metadata update for main pages
+  // Metadata update for main pages (regional pages set their own in RegionalLandingPage)
   useEffect(() => {
     if (currentPage === 'home') {
-      document.title = "Monte-Charge Genève & Vaud | BatiMove Sàrl dès 150 CHF/h";
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute('content', "Location monte-meuble et monte-charge avec opérateur qualifié à Genève et Vaud. Jusqu'au 10ᵉ étage (33m, 400kg). Intervention express 7j/7 dès 150 CHF/h.");
-      }
+      setPageMeta({ ...DEFAULT_META, path: '/' });
     } else if (currentPage === 'contact') {
-      document.title = "Demande de Devis Monte-Charge | Genève & Vaud | BatiMove";
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute('content', "Contactez BatiMove Sàrl pour votre réservation de monte-meuble ou monte-charge à Genève et Vaud. Devis gratuit et intervention rapide.");
-      }
+      setPageMeta({
+        title: 'Devis Monte-Meuble Genève & Vaud | BatiMove Sàrl',
+        description:
+          "Contactez BatiMove Sàrl pour réserver un monte-meuble ou monte-charge à Genève et Vaud. Devis gratuit au 0800 825 925, réponse rapide 6j/7.",
+        path: '/contact',
+      });
     }
+    trackPageView(window.location.pathname);
   }, [currentPage]);
 
   const navigateTo = (page: string) => {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Send, ShieldCheck, Clock, MapPin, Building } from 'lucide-react';
+import { track } from '../lib/analytics';
 
 interface QuickQuoteDrawerProps {
   isOpen: boolean;
@@ -34,6 +35,7 @@ Je souhaite obtenir un devis express pour un monte-charge :
 Merci pour votre retour rapide !`;
 
     const encoded = encodeURIComponent(msg);
+    track('quote_whatsapp_submit', { commune: formData.commune || 'non-specifie' });
     window.open(`https://wa.me/41798896406?text=${encoded}`, '_blank', 'noopener,noreferrer');
     onClose();
   };

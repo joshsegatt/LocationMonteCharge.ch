@@ -39,7 +39,7 @@ const workItems: WorkItem[] = [
   { 
     src: "/assets/work/real-geneva-5.webp", 
     location: "Genève • Flotte BatiMove", 
-    detail: "Camion monte-meuble autotracté Klaas / Böcker 400kg", 
+    detail: "Camion monte-meuble autotracté Klaas / Böcker 500 kg", 
     badge: "ÉQUIPEMENT DE POINTE" 
   },
   { 

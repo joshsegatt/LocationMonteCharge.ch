@@ -23,12 +23,12 @@ export default function NavV2({ navigateTo, currentPage }: NavProps) {
   useEffect(() => { setMobileOpen(false); }, [currentPage]);
 
   const navLinks = [
-    { label: 'Accueil', action: () => { navigateTo('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); } },
+    { label: 'Accueil', href: '/', action: () => { navigateTo('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); } },
     { label: 'À propos', href: '#about' },
     { label: 'Réalisations', href: '#realisations' },
     { label: 'Zones & Villes', href: '#zones' },
     { label: 'FAQ', href: '#faq' },
-    { label: 'Contact', action: () => navigateTo('contact') },
+    { label: 'Contact', href: '/contact', action: () => navigateTo('contact') },
   ];
 
   const handleLinkClick = (e: React.MouseEvent, link: { label: string; action?: () => void; href?: string }) => {
