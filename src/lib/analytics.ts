@@ -22,8 +22,28 @@ declare global {
 }
 
 const GA4_ID = import.meta.env.VITE_GA4_ID as string | undefined;
-const ADS_ID = import.meta.env.VITE_GOOGLE_ADS_ID as string | undefined;
+// Google Ads conta BatiMove Sàrl (114-843-5480). O ID é público (aparece no
+// HTML servido de qualquer forma), por isso pode viver no código.
+const ADS_ID = (import.meta.env.VITE_GOOGLE_ADS_ID as string | undefined) || 'AW-18400207296';
 const META_PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID as string | undefined;
+
+// Ações de conversão do Google Ads (labels do send_to).
+const ADS_CONVERSION_LABELS: Record<string, string> = {
+  // "Contact": qualquer contato direto (telefone, WhatsApp)
+  call_click: 'NBeNCM6MqrMdEMDD88VE',
+  whatsapp_click: 'NBeNCM6MqrMdEMDD88VE',
+  whatsapp_widget_send: 'NBeNCM6MqrMdEMDD88VE',
+  quote_whatsapp_submit: 'NBeNCM6MqrMdEMDD88VE',
+  // "Lead - Formulaire Devis"
+  lead_form_submit: '7iQmCIrW8uQcEMDD88VE',
+};
+
+// "Appel (079 889 64 06)": o Google troca esse número por um de encaminhamento
+// para medir ligações de 60s+ vindas de anúncios.
+const ADS_PHONE_CONVERSION = {
+  label: 'WzxDCM6v_OYcEMDD88VE',
+  number: '079 889 64 06',
+};
 
 let initialized = false;
 
@@ -43,7 +63,13 @@ function loadGtag() {
   };
   window.gtag('js', new Date());
   if (GA4_ID) window.gtag('config', GA4_ID);
-  if (ADS_ID) window.gtag('config', ADS_ID);
+  if (ADS_ID) {
+    window.gtag('config', ADS_ID);
+    // Conversão de chamada por troca de número (Appels depuis un site)
+    window.gtag('config', `${ADS_ID}/${ADS_PHONE_CONVERSION.label}`, {
+      phone_conversion_number: ADS_PHONE_CONVERSION.number,
+    });
+  }
 }
 
 function loadMetaPixel() {
@@ -73,6 +99,15 @@ function loadMetaPixel() {
 export function track(event: string, params: Record<string, unknown> = {}) {
   try {
     window.gtag?.('event', event, params);
+    // Google Ads conversion (send_to label) when the event maps to an action
+    const label = ADS_CONVERSION_LABELS[event];
+    if (ADS_ID && label) {
+      window.gtag?.('event', 'conversion', {
+        send_to: `${ADS_ID}/${label}`,
+        value: 1.0,
+        currency: 'CHF',
+      });
+    }
     window.fbq?.('trackCustom', event, params);
   } catch {
     // Tracking must never break the UI.
