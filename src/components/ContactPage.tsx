@@ -30,7 +30,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: string)
           </p>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-2">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-black tracking-tight text-slate-950 leading-tight">
-              Dossier De Mission <span className="text-[#0052A3]">& Contact</span>
+              Devis gratuit <span className="text-[#0052A3]">monte-meuble</span>
             </h1>
             <p className="text-slate-600 text-xs sm:text-sm font-normal max-w-lg lg:text-right">
               Coordination certifiée à Genève & Vaud. Réponse technique rapide sous 2 à 4 heures ouvrées.
@@ -160,7 +160,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: string)
                     </div>
                     <div className="space-y-1">
                       <h3 className="text-2xl font-display font-bold text-slate-950 tracking-tight">
-                        Dossier Transmis avec Succès
+                        Demande envoyée
                       </h3>
                       <p className="text-slate-600 text-sm font-medium max-w-md">
                         Un coordinateur technique BatiMove Sàrl analyse vos accès et vous contactera dans les meilleurs délais ouvrés.
@@ -180,7 +180,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: string)
                     <div className="flex justify-between items-center border-b border-slate-100 pb-3 mb-4 shrink-0">
                       <div>
                         <h2 className="text-lg sm:text-xl font-display font-bold text-slate-950 tracking-tight">
-                          Formulaire D'Intervention
+                          Demande de devis gratuit
                         </h2>
                         <p className="text-[11px] text-slate-500 font-medium">
                           Spécifications techniques pour devis sans engagement
@@ -278,7 +278,7 @@ export default function ContactPage({ navigateTo }: { navigateTo: (page: string)
                           disabled={formStatus === 'sending'}
                           className="w-full bg-[#E10600] hover:bg-[#C80500] text-white py-3.5 rounded-xl font-display font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_6px_20px_rgba(225,6,0,0.35)] hover:shadow-[0_10px_28px_rgba(225,6,0,0.45)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
                         >
-                          <span>{formStatus === 'sending' ? 'Envoi en cours...' : 'Transmettre le Dossier Mission'}</span>
+                          <span>{formStatus === 'sending' ? 'Envoi en cours...' : 'Recevoir mon devis gratuit'}</span>
                           <Send size={15} className={formStatus === 'sending' ? 'animate-pulse' : ''} />
                         </button>
                         {formStatus === 'error' && (
