@@ -1,318 +1,253 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Phone, Mail, MapPin, Send, CheckCircle2, Clock, Navigation, ExternalLink } from 'lucide-react';
-import { AppleAestheticBackdrop } from './AppleAestheticBackdrop';
+import { motion } from 'motion/react';
+import { ChevronRight } from 'lucide-react';
 import { track } from '../lib/analytics';
+import { waLink, PHONE_TEL, PHONE_DISPLAY } from '../lib/contact';
+
+const LINK = 'underline underline-offset-4 decoration-slate-300 hover:decoration-[#0A192F]';
+const LABEL = 'block text-sm font-medium text-[#0A192F] mb-1.5';
+const FIELD =
+  'w-full rounded-lg border border-slate-300 bg-white px-3.5 text-base text-[#0A192F] placeholder:text-slate-400 outline-none transition-colors focus:border-[#0A192F] focus:ring-2 focus:ring-[#0052A3]/25';
+
+const MAPS_ROUTE = 'https://www.google.com/maps/dir/?api=1&destination=Rue+De-Monthoux+64,+1201+Gen%C3%A8ve';
 
 export default function ContactPage({ navigateTo }: { navigateTo: (page: string) => void }) {
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormStatus('sending');
+    const formData = new FormData(e.currentTarget);
+    try {
+      const res = await fetch('https://formspree.io/f/xgorrdkg', {
+        method: 'POST',
+        body: formData,
+        headers: { Accept: 'application/json' },
+      });
+      if (res.ok) {
+        setFormStatus('success');
+        track('lead_form_submit');
+      } else {
+        setFormStatus('error');
+      }
+    } catch {
+      setFormStatus('error');
+    }
+  };
+
   return (
-    <motion.main 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      exit={{ opacity: 0 }} 
-      className="min-h-screen bg-[#F1F5F8] pt-24 sm:pt-28 lg:pt-28 pb-10 sm:pb-14 px-4 sm:px-6 md:px-10 lg:px-14 relative flex flex-col justify-between overflow-x-hidden select-none"
+    <motion.main
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="bg-white text-[#0A192F] pt-24 sm:pt-32 pb-16 md:pb-24"
     >
-      <AppleAestheticBackdrop />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+        <nav aria-label="Fil d’Ariane" className="flex items-center gap-1.5 text-[13px] text-slate-500 mb-6 lg:mb-8">
+          <a
+            href="/"
+            onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
+            className={`${LINK} hover:text-[#0A192F]`}
+          >
+            Accueil
+          </a>
+          <ChevronRight size={12} className="text-slate-400" aria-hidden="true" />
+          <span className="text-[#0A192F]">Contact</span>
+        </nav>
 
-      {/* Atmospheric Luxury Green Ambient Lighting & Depth Glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[450px] bg-[radial-gradient(ellipse_at_top,rgba(0,82,163,0.14),transparent_70%)] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-[radial-gradient(circle_at_bottom_right,rgba(0,82,163,0.09),transparent_60%)] pointer-events-none" />
-      <div className="absolute inset-0 technical-grid opacity-[0.025] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto w-full relative z-10 flex-1 flex flex-col justify-between py-2 sm:py-3">
-        
-        {/* Header - Compact Luxury Stage */}
-        <div className="mb-4 sm:mb-6 text-center lg:text-left shrink-0">
-          <p className="text-[#0052A3] text-xs sm:text-[13px] font-bold uppercase tracking-[0.18em] mb-1.5 font-sans">
-            Coordination Suisse • Intervention Rapide
-          </p>
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-2">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-black tracking-tight text-slate-950 leading-tight">
-              Devis gratuit <span className="text-[#0052A3]">monte-meuble</span>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+          <div className="lg:col-span-5">
+            <h1 className="font-display font-semibold text-[38px] sm:text-[52px] leading-[1.04] tracking-[-0.035em] text-balance">
+              Demander un devis gratuit
             </h1>
-            <p className="text-slate-600 text-xs sm:text-sm font-normal max-w-lg lg:text-right">
-              Coordination certifiée à Genève & Vaud. Réponse technique rapide sous 2 à 4 heures ouvrées.
+            <p className="mt-5 text-[16px] sm:text-lg leading-[1.55] text-slate-600 max-w-md">
+              Le plus simple&nbsp;: une photo de l’objet sur WhatsApp, avec l’étage et la commune. Vous pouvez aussi
+              nous appeler ou remplir le formulaire.
+            </p>
+
+            <dl className="mt-9 border-t border-slate-200">
+              <div className="grid grid-cols-[104px_1fr] items-baseline gap-4 py-4 border-b border-slate-200">
+                <dt className="text-sm text-slate-500">Téléphone</dt>
+                <dd>
+                  <a href={PHONE_TEL} className={`font-display font-semibold text-lg tabular-nums ${LINK}`}>
+                    {PHONE_DISPLAY}
+                  </a>
+                  <span className="ml-2 text-sm text-slate-500">gratuit</span>
+                </dd>
+              </div>
+              <div className="grid grid-cols-[104px_1fr] items-baseline gap-4 py-4 border-b border-slate-200">
+                <dt className="text-sm text-slate-500">WhatsApp</dt>
+                <dd>
+                  <a
+                    href={waLink()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`font-display font-semibold text-lg tabular-nums ${LINK}`}
+                  >
+                    079 889 64 06
+                  </a>
+                </dd>
+              </div>
+              <div className="grid grid-cols-[104px_1fr] items-baseline gap-4 py-4 border-b border-slate-200">
+                <dt className="text-sm text-slate-500">E-mail</dt>
+                <dd>
+                  <a href="mailto:info@batimove.ch" className={`font-display font-semibold text-lg ${LINK}`}>
+                    info@batimove.ch
+                  </a>
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="lg:col-span-7">
+            <div className="bg-[#F1F5F8] rounded-xl p-5 sm:p-8">
+              {formStatus === 'success' ? (
+                <div role="status" className="py-10 sm:py-16">
+                  <h2 className="font-display font-semibold text-2xl sm:text-[28px] tracking-[-0.02em]">
+                    Demande envoyée
+                  </h2>
+                  <p className="mt-3 text-base leading-relaxed text-slate-600 max-w-md">
+                    Merci. Nous vous recontactons par téléphone ou par e-mail avec le devis.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setFormStatus('idle')}
+                    className={`mt-6 py-1 text-base font-semibold text-[#0A192F] ${LINK}`}
+                  >
+                    Envoyer une autre demande
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} aria-labelledby="contact-form-title">
+                  <h2 id="contact-form-title" className="font-display font-semibold text-xl sm:text-2xl tracking-[-0.02em]">
+                    Formulaire de devis
+                  </h2>
+
+                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-5">
+                    <div>
+                      <label htmlFor="contact-name" className={LABEL}>
+                        Nom ou société
+                      </label>
+                      <input
+                        id="contact-name"
+                        name="name"
+                        required
+                        type="text"
+                        maxLength={100}
+                        autoComplete="name"
+                        className={`${FIELD} h-12`}
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="contact-phone" className={LABEL}>
+                        Téléphone
+                      </label>
+                      <input
+                        id="contact-phone"
+                        name="phone"
+                        required
+                        type="tel"
+                        maxLength={25}
+                        pattern="[\+]?[\d\s\-\(\)]{8,20}"
+                        title="Format attendu&nbsp;: +41 79 000 00 00"
+                        autoComplete="tel"
+                        placeholder="+41 79 000 00 00"
+                        className={`${FIELD} h-12 tabular-nums`}
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label htmlFor="contact-email" className={LABEL}>
+                        E-mail
+                      </label>
+                      <input
+                        id="contact-email"
+                        name="email"
+                        required
+                        type="email"
+                        maxLength={120}
+                        autoComplete="email"
+                        className={`${FIELD} h-12`}
+                      />
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label htmlFor="contact-message" className={LABEL}>
+                        Votre demande
+                      </label>
+                      <textarea
+                        id="contact-message"
+                        name="message"
+                        required
+                        maxLength={1500}
+                        rows={5}
+                        placeholder="L’objet à monter, l’étage, la commune et la date souhaitée."
+                        className={`${FIELD} py-3 resize-y min-h-[132px]`}
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={formStatus === 'sending'}
+                    className="press mt-6 w-full sm:w-auto inline-flex items-center justify-center h-14 px-7 rounded-full bg-[#E10600] hover:bg-[#C80500] text-white text-[16px] font-semibold disabled:opacity-60 disabled:cursor-default"
+                  >
+                    {formStatus === 'sending' ? 'Envoi en cours…' : 'Envoyer la demande'}
+                  </button>
+
+                  {formStatus === 'error' && (
+                    <p className="mt-4 text-sm text-[#C80500]" role="alert">
+                      L’envoi a échoué. Réessayez ou appelez le{' '}
+                      <a href={PHONE_TEL} className="font-semibold underline underline-offset-4 tabular-nums">
+                        {PHONE_DISPLAY}
+                      </a>
+                      .
+                    </p>
+                  )}
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-16 md:mt-24 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
+          <div className="lg:col-span-5">
+            <h2 className="font-display font-semibold text-[28px] sm:text-[34px] leading-[1.1] tracking-[-0.03em]">
+              Nous trouver
+            </h2>
+            <address className="mt-4 not-italic text-base leading-relaxed text-slate-600">
+              BatiMove Sàrl
+              <br />
+              Rue De-Monthoux 64
+              <br />
+              1201 Genève
+            </address>
+            <a
+              href={MAPS_ROUTE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`mt-4 inline-block py-1 text-base font-semibold text-[#0A192F] ${LINK}`}
+            >
+              Ouvrir l’itinéraire dans Google Maps
+            </a>
+            <p className="mt-6 text-sm leading-relaxed text-slate-500 tabular-nums">
+              IDE CHE-143.091.230. Assurance RC professionnelle jusqu’à CHF&nbsp;5’000’000.
             </p>
           </div>
-        </div>
 
-        {/* 2-Column Command Center (Fixed Fit on Desktop) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-7 items-stretch flex-1 min-h-0">
-          
-          {/* Left Column: Fast Contacts & Next-Gen Interactive Map */}
-          <div className="lg:col-span-5 flex flex-col gap-3 sm:gap-3.5 h-full min-h-0">
-            
-            {/* 3 Compact Direct Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-2.5 sm:gap-3 shrink-0">
-              
-              {/* Phone Free */}
-              <a href="tel:0800825925" className="block group cursor-pointer">
-                <div className="p-3.5 sm:p-4 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/90 hover:border-[#0052A3]/50 transition-all duration-300 flex items-center gap-3.5 shadow-[0_4px_20px_rgba(0,82,163,0.04)] hover:shadow-[0_10px_30px_rgba(0,82,163,0.12)] hover:-translate-y-0.5">
-                  <div className="w-10 h-10 rounded-xl bg-[#0052A3]/[0.06] group-hover:bg-[#0052A3] group-hover:text-white transition-all duration-300 flex items-center justify-center text-[#0052A3] shrink-0">
-                    <Phone size={18} strokeWidth={2} />
-                  </div>
-                  <div className="space-y-0.5 overflow-hidden">
-                    <span className="text-[10px] text-[#0052A3] font-bold tracking-wider uppercase block">Ligne Gratuite Suisse</span>
-                    <h3 className="text-base font-display font-bold text-slate-950 group-hover:text-[#0052A3] transition-colors truncate">
-                      0800 825 925
-                    </h3>
-                  </div>
-                </div>
-              </a>
-
-              {/* Direct Support & WhatsApp */}
-              <a href="https://wa.me/41798896406" target="_blank" rel="noopener noreferrer" className="block group cursor-pointer">
-                <div className="p-3.5 sm:p-4 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/90 hover:border-[#0052A3]/50 transition-all duration-300 flex items-center gap-3.5 shadow-[0_4px_20px_rgba(0,82,163,0.04)] hover:shadow-[0_10px_30px_rgba(0,82,163,0.12)] hover:-translate-y-0.5">
-                  <div className="w-10 h-10 rounded-xl bg-[#0052A3]/[0.06] group-hover:bg-[#0052A3] group-hover:text-white transition-all duration-300 flex items-center justify-center text-[#0052A3] shrink-0">
-                    <Phone size={18} strokeWidth={2} />
-                  </div>
-                  <div className="space-y-0.5 overflow-hidden">
-                    <span className="text-[10px] text-[#0052A3] font-bold tracking-wider uppercase block">Support Direct & WhatsApp</span>
-                    <h3 className="text-base font-display font-bold text-slate-950 group-hover:text-[#0052A3] transition-colors truncate">
-                      079 889 64 06
-                    </h3>
-                  </div>
-                </div>
-              </a>
-
-              {/* Email */}
-              <a href="mailto:info@batimove.ch" className="block group cursor-pointer">
-                <div className="p-3.5 sm:p-4 bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200/90 hover:border-[#0052A3]/50 transition-all duration-300 flex items-center gap-3.5 shadow-[0_4px_20px_rgba(0,82,163,0.04)] hover:shadow-[0_10px_30px_rgba(0,82,163,0.12)] hover:-translate-y-0.5">
-                  <div className="w-10 h-10 rounded-xl bg-[#0052A3]/[0.06] group-hover:bg-[#0052A3] group-hover:text-white transition-all duration-300 flex items-center justify-center text-[#0052A3] shrink-0">
-                    <Mail size={18} strokeWidth={2} />
-                  </div>
-                  <div className="space-y-0.5 overflow-hidden">
-                    <span className="text-[10px] text-[#0052A3] font-bold tracking-wider uppercase block">Communication Officielle</span>
-                    <h3 className="text-base font-display font-bold text-slate-950 group-hover:text-[#0052A3] transition-colors truncate">
-                      info@batimove.ch
-                    </h3>
-                  </div>
-                </div>
-              </a>
-
-            </div>
-
-            {/* Next-Gen Fully Interactive Custom Map Card */}
-            <div className="flex-1 min-h-[200px] lg:min-h-0 bg-white/95 rounded-2xl border border-slate-200/90 overflow-hidden relative shadow-[0_8px_30px_rgba(0,82,163,0.06)] hover:shadow-[0_14px_40px_rgba(0,82,163,0.12)] transition-all duration-300 flex flex-col group">
-              
-              {/* Map Viewport - Fully Interactive (pan, zoom, click) */}
-              <div className="relative w-full flex-1 min-h-[170px] overflow-hidden">
-                <iframe 
-                  title="Carte Interactive BatiMove Sàrl Genève"
-                  src="https://maps.google.com/maps?q=Rue%20De-MONTHOUX%2064,%201201%20Gen%C3%A8ve&t=m&z=15&ie=UTF8&iwloc=B&output=embed"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0 w-full h-full border-0 filter saturate-[1.1] contrast-[1.02]"
-                />
-
-                {/* Interactive Action Pill on Map */}
-                <div className="absolute top-3 left-3 z-10">
-                  <a 
-                    href="https://www.google.com/maps/dir/?api=1&destination=Rue+De-MONTHOUX+64,+1201+Genève" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="px-3 py-1.5 rounded-lg bg-[#0052A3] text-white text-[11px] font-bold tracking-wider uppercase shadow-md hover:bg-[#004080] transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
-                  >
-                    <Navigation size={12} className="text-[#38BDF8]" />
-                    <span>Itinéraire GPS</span>
-                    <ExternalLink size={11} className="opacity-70" />
-                  </a>
-                </div>
-
-              </div>
-
-              {/* Bottom Address Bar */}
-              <div className="p-3 sm:p-3.5 bg-white border-t border-slate-100 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <MapPin size={15} className="text-[#0052A3] shrink-0" />
-                  <p className="text-xs text-slate-800 font-bold truncate">
-                    Rue De-Monthoux 64, 1201 Genève
-                  </p>
-                </div>
-                <span className="font-mono text-[11px] text-slate-500 font-semibold shrink-0 ml-2">
-                  CHE-143.091.230
-                </span>
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* Right Column: Mission Form (Self-Contained Luxury Card) */}
-          <div className="lg:col-span-7 h-full flex flex-col min-h-0">
-            <div className="rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/90 p-5 sm:p-7 lg:p-8 shadow-[0_12px_45px_rgba(0,82,163,0.08)] h-full flex flex-col justify-between relative overflow-hidden">
-              
-              {/* Subtle green ambient accent line on top of form */}
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#0052A3] to-transparent" />
-
-              <AnimatePresence mode="wait">
-                {formStatus === 'success' ? (
-                  <motion.div 
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex flex-col items-center justify-center p-6 text-center space-y-4 my-auto"
-                  >
-                    <div className="w-16 h-16 rounded-2xl bg-[#0052A3]/10 text-[#0052A3] flex items-center justify-center shadow-inner">
-                      <CheckCircle2 size={36} />
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="text-2xl font-display font-bold text-slate-950 tracking-tight">
-                        Demande envoyée
-                      </h3>
-                      <p className="text-slate-600 text-sm font-medium max-w-md">
-                        Un coordinateur technique BatiMove Sàrl analyse vos accès et vous contactera dans les meilleurs délais ouvrés.
-                      </p>
-                    </div>
-                    <button 
-                      onClick={() => setFormStatus('idle')}
-                      className="px-6 py-2.5 rounded-lg bg-[#0052A3] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#004080] transition-all cursor-pointer shadow-md"
-                    >
-                      Nouvelle Demande
-                    </button>
-                  </motion.div>
-                ) : (
-                  <div className="h-full flex flex-col justify-between">
-                    
-                    {/* Form Header */}
-                    <div className="flex justify-between items-center border-b border-slate-100 pb-3 mb-4 shrink-0">
-                      <div>
-                        <h2 className="text-lg sm:text-xl font-display font-bold text-slate-950 tracking-tight">
-                          Demande de devis gratuit
-                        </h2>
-                        <p className="text-[11px] text-slate-500 font-medium">
-                          Spécifications techniques pour devis sans engagement
-                        </p>
-                      </div>
-                      <span className="flex items-center gap-1.5 text-xs text-[#0052A3] font-semibold">
-                        <Clock size={13} />
-                        <span>Réponse rapide</span>
-                      </span>
-                    </div>
-                    
-                    {/* Form Fields */}
-                    <form 
-                      className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-3 flex-1" 
-                      onSubmit={async (e) => {
-                        e.preventDefault();
-                        setFormStatus('sending');
-                        const formData = new FormData(e.currentTarget);
-                        try {
-                          const res = await fetch('https://formspree.io/f/xgorrdkg', {
-                            method: 'POST',
-                            body: formData,
-                            headers: { 'Accept': 'application/json' }
-                          });
-                          if (res.ok) {
-                            setFormStatus('success');
-                            track('lead_form_submit');
-                          } else {
-                            setFormStatus('error');
-                          }
-                        } catch {
-                          setFormStatus('error');
-                        }
-                      }}
-                    >
-                      <div className="space-y-1">
-                        <label className="text-[11px] sm:text-xs font-sans text-slate-700 font-bold ml-0.5">
-                          Votre Nom / Société
-                        </label>
-                        <input 
-                          name="name" 
-                          required 
-                          type="text" 
-                          maxLength={100}
-                          className="w-full bg-slate-50/80 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none text-base sm:text-sm placeholder:text-slate-400 font-normal" 
-                          placeholder="ex. Jean Dupont / Régie Immobilière SA" 
-                        />
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="text-[11px] sm:text-xs font-sans text-slate-700 font-bold ml-0.5">
-                          Téléphone Direct
-                        </label>
-                        <input
-                          name="phone"
-                          required
-                          type="tel"
-                          maxLength={25}
-                          pattern="[\+]?[\d\s\-\(\)]{8,20}"
-                          title="Format attendu: +41 79 000 00 00 ou 0800 000 000"
-                          className="w-full bg-slate-50/80 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none text-base sm:text-sm placeholder:text-slate-400 font-normal"
-                          placeholder="+41 79 000 00 00"
-                        />
-                      </div>
-
-                      <div className="col-span-1 md:col-span-2 space-y-1">
-                        <label className="text-[11px] sm:text-xs font-sans text-slate-700 font-bold ml-0.5">
-                          Adresse Email
-                        </label>
-                        <input
-                          name="email"
-                          required
-                          type="email"
-                          maxLength={120}
-                          className="w-full bg-slate-50/80 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none text-base sm:text-sm placeholder:text-slate-400 font-normal"
-                          placeholder="votre.email@domaine.ch"
-                        />
-                      </div>
-
-                      <div className="col-span-1 md:col-span-2 space-y-1 flex-1 flex flex-col">
-                        <label className="text-[11px] sm:text-xs font-sans text-slate-700 font-bold ml-0.5">
-                          Détails de la Manœuvre (Commune, Étage, Nature des charges)
-                        </label>
-                        <textarea 
-                          name="message" 
-                          required 
-                          maxLength={1500}
-                          className="w-full flex-1 min-h-[90px] lg:min-h-0 bg-slate-50/80 border border-slate-200/90 rounded-xl px-3.5 py-2.5 text-slate-900 focus:bg-white focus:border-[#0052A3] focus:ring-2 focus:ring-[#0052A3]/15 transition-all outline-none text-base sm:text-sm resize-none placeholder:text-slate-400 font-normal" 
-                          placeholder="Précisez la commune, l'étage (max. 10e niveau), le volume ou poids (max. 500kg) et la date souhaitée..." 
-                        />
-                      </div>
-
-                      <div className="col-span-1 md:col-span-2 pt-1 shrink-0">
-                        <button 
-                          disabled={formStatus === 'sending'}
-                          className="w-full bg-[#E10600] hover:bg-[#C80500] text-white py-3.5 rounded-xl font-display font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_6px_20px_rgba(225,6,0,0.35)] hover:shadow-[0_10px_28px_rgba(225,6,0,0.45)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
-                        >
-                          <span>{formStatus === 'sending' ? 'Envoi en cours...' : 'Recevoir mon devis gratuit'}</span>
-                          <Send size={15} className={formStatus === 'sending' ? 'animate-pulse' : ''} />
-                        </button>
-                        {formStatus === 'error' && (
-                          <p className="mt-2 text-xs text-[#E10600] font-semibold text-center" role="alert">
-                            L'envoi a échoué. Réessayez ou appelez-nous directement au{' '}
-                            <a href="tel:0800825925" className="underline">0800 825 925</a>.
-                          </p>
-                        )}
-                      </div>
-
-                    </form>
-                  </div>
-                )}
-              </AnimatePresence>
+          <div className="lg:col-span-7">
+            <div className="relative aspect-[4/3] sm:aspect-[16/9] rounded-xl overflow-hidden border border-slate-200 bg-[#F1F5F8]">
+              <iframe
+                title="Carte&nbsp;: BatiMove Sàrl, Rue De-Monthoux 64, Genève"
+                src="https://maps.google.com/maps?q=Rue%20De-MONTHOUX%2064,%201201%20Gen%C3%A8ve&t=m&z=15&ie=UTF8&iwloc=B&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="absolute inset-0 w-full h-full border-0"
+              />
             </div>
           </div>
-
         </div>
-
-        {/* Legal & Guarantee Line with Back to Home Link */}
-        <div className="pt-4 text-center text-xs text-slate-600 font-medium shrink-0 flex flex-wrap items-center justify-center gap-2 sm:gap-4">
-          <span>BatiMove Sàrl • Rue De-Monthoux 64, 1201 Genève</span>
-          <span className="hidden sm:inline">•</span>
-          <span className="text-[#0052A3] font-bold">Assurance RC 5'000'000 CHF</span>
-          <span className="hidden sm:inline">•</span>
-          <button 
-            type="button"
-            onClick={() => navigateTo('home')}
-            className="text-[#0052A3] hover:text-[#0052A3] font-semibold hover:underline cursor-pointer"
-          >
-            ← Retour à l'accueil
-          </button>
-        </div>
-
       </div>
     </motion.main>
   );

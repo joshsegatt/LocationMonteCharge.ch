@@ -1,159 +1,158 @@
-import React, { useRef, useState } from 'react';
-import { Globe, Clock, Volume2, VolumeX, Play } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Play } from 'lucide-react';
+import Reveal from './Reveal';
 
 interface AboutOverviewProps {
   onContactClick?: () => void;
 }
 
-export default function AboutOverviewV2({ onContactClick }: AboutOverviewProps) {
+const CARD = 'rounded-[28px] p-7 sm:p-8 flex flex-col justify-end min-h-[13.5rem]';
+const CARD_TITLE = 'font-display font-semibold leading-[1.08] tracking-[-0.03em]';
+
+// Présentation de l'entreprise : la vidéo d'une intervention réelle et quatre cartes
+// de tailles différentes, une par engagement.
+// 720p sur téléphone et tablette (1,9 Mo), 1080p sur grand écran (3,9 Mo). Les deux fichiers sont
+// en couleurs standard (bt709) : l'original HLG coûtait une conversion à chaque image.
+// Appelé seulement une fois la vidéo à l'écran, donc toujours dans le navigateur.
+const liftVideo = () =>
+  window.matchMedia('(min-width: 1024px)').matches ? '/assets/batimove-lift-1080.mp4' : '/assets/batimove-lift-720.mp4';
+
+export default function AboutOverviewV2(_props: AboutOverviewProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
 
-  const toggleAudio = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (videoRef.current) {
-      const nextMuted = !videoRef.current.muted;
-      videoRef.current.muted = nextMuted;
-      setIsMuted(nextMuted);
-    }
-  };
+  // La vidéo ne se charge que lorsqu'elle approche de l'écran
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const togglePlay = () => {
-    if (videoRef.current) {
-      if (videoRef.current.paused) {
-        videoRef.current.play();
-        setIsPlaying(true);
-      } else {
-        videoRef.current.pause();
-        setIsPlaying(false);
-      }
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play();
+      setIsPlaying(true);
+    } else {
+      v.pause();
+      setIsPlaying(false);
     }
   };
 
   return (
-    <section id="about" className="py-16 md:py-28 bg-[#F1F5F8] overflow-hidden">
+    <section id="about" className="py-16 md:py-24 bg-[#F1F5F8]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-          {/* Left Image Graphic */}
-          <div className="flex-1 w-full relative">
-            <div className="aspect-square max-w-sm sm:max-w-md lg:max-w-lg mx-auto relative">
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#0052A3]/20 to-transparent rounded-full transform -rotate-6 scale-100 sm:scale-105 pointer-events-none" />
-              <img 
-                src="/assets/work/7.webp" 
-                alt="Logistique Globe" 
-                className="w-full h-full object-cover rounded-full shadow-2xl border-4 sm:border-8 border-white"
-              />
-              
-              {/* Interactive Video Card in Action */}
-              <div 
-                onClick={togglePlay}
-                className="absolute -bottom-4 sm:-bottom-8 left-0 sm:-left-6 lg:-left-8 w-44 sm:w-56 lg:w-60 h-56 sm:h-72 lg:h-80 rounded-2xl shadow-2xl border-4 border-white ring-1 ring-black/10 overflow-hidden bg-slate-950 group cursor-pointer select-none transition-transform duration-300 hover:scale-[1.02]"
-                title="Cliquez pour mettre en pause / lecture"
-              >
-                <video
-                  ref={videoRef}
-                  src="/assets/batimove-lift.mp4"
-                  poster="/assets/batimove-lift-poster.webp"
-                  autoPlay
-                  loop
-                  muted={isMuted}
-                  playsInline
-                  preload="metadata"
-                  className="w-full h-full object-cover object-[center_35%]"
-                >
-                  <source src="/assets/batimove-lift.mp4" type="video/mp4" />
-                </video>
-
-                {/* Subtle gradient vignette for readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/35 pointer-events-none" />
-
-
-                {/* Paused state overlay */}
-                {!isPlaying && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[1px] pointer-events-none">
-                    <div className="w-11 h-11 rounded-full bg-white/95 text-slate-900 flex items-center justify-center shadow-xl">
-                      <Play size={20} className="translate-x-0.5 fill-slate-900 text-slate-900" />
-                    </div>
-                  </div>
-                )}
-
-                {/* Bottom Info & Audio Toggle */}
-                <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2">
-                  <span className="text-[10px] sm:text-xs font-bold text-white/95 drop-shadow truncate pointer-events-none">
-                    Levage 3ᵉ étage • BatiMove
-                  </span>
-                  <button
-                    type="button"
-                    onClick={toggleAudio}
-                    aria-label={isMuted ? "Activer le son" : "Couper le son"}
-                    className="p-1.5 rounded-full bg-slate-950/80 hover:bg-slate-900 text-white/90 hover:text-white backdrop-blur-md border border-white/20 transition-all hover:scale-110 active:scale-95 cursor-pointer shadow-sm shrink-0"
-                    title={isMuted ? "Activer le son" : "Couper le son"}
-                  >
-                    {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Content */}
-          <div className="flex-1">
-            <p className="text-[#0052A3] text-xs sm:text-sm font-bold uppercase tracking-widest mb-2 font-sans">
-              BatiMove Sàrl • Division Levage & Monte-Meuble
-            </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black text-slate-900 mb-6 leading-tight">
-              L'Excellence Du Levage <br />
-              <span className="text-[#0052A3]">À Genève & Dans Le Vaud</span>
-            </h2>
-            <p className="text-slate-600 mb-8 leading-relaxed text-sm sm:text-base">
-              Spécialiste agréé et division technique de <a href="https://batimove.ch" target="_blank" rel="noopener noreferrer" className="text-[#0052A3] font-bold underline decoration-[#0052A3] hover:text-[#0066CC] transition-colors">BatiMove Sàrl</a>, nous résolvons vos défis d'accès les plus complexes. Du déménagement d'appartement (canapés, pianos, meubles lourds par fenêtre ou balcon) jusqu'à l'approvisionnement de chantiers et rénovations urbaines, notre flotte autotractée jusqu'au 10ᵉ étage (500 kg) assure une prestation rapide, soignée et sans encombre.
-            </p>
-
-            <div className="space-y-6 mb-10">
-              <div className="flex gap-4">
-                <div className="shrink-0 mt-1">
-                  <Globe size={28} className="text-[#0052A3]" />
-                </div>
-                <div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 mb-1">Couverture Cantonale Complète</h4>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    Déploiement à Genève (Carouge, Meyrin, Lancy, Cologny, Versoix) et dans le canton de Vaud (Nyon, Gland, Rolle, Morges, Lausanne, Vevey, Montreux).
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="shrink-0 mt-1">
-                  <Clock size={28} className="text-[#0052A3]" />
-                </div>
-                <div>
-                  <h4 className="text-base sm:text-lg font-bold text-slate-900 mb-1">Conformité SUVA & Démarches de Voirie</h4>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    Opérateurs qualifiés formés aux normes SUVA, couverture RC professionnelle jusqu'à CHF 5'000'000 et accompagnement pour l'obtention des autorisations de voirie communale.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4">
-              <button 
-                type="button"
-                onClick={onContactClick}
-                className="px-8 py-3.5 bg-[#E10600] hover:bg-[#C80500] text-white text-sm font-bold rounded-lg uppercase tracking-wider transition-all duration-300 shadow-[0_4px_16px_rgba(225,6,0,0.35)] hover:shadow-[0_8px_25px_rgba(225,6,0,0.5)] hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
-              >
-                Faites connaissance &rarr;
-              </button>
-              <a 
-                href="https://batimove.ch" 
-                target="_blank" 
+        <Reveal className="grid lg:grid-cols-12 gap-6 lg:gap-16 lg:items-end">
+          <h2 className="lg:col-span-7 font-display font-semibold text-[34px] sm:text-[48px] leading-[1.05] tracking-[-0.035em] text-[#0A192F] text-balance">
+            Le monte-meuble de BatiMove Sàrl, entreprise genevoise.
+          </h2>
+          <div className="lg:col-span-5">
+            <p className="text-base sm:text-[17px] leading-relaxed text-slate-600">
+              Monte Charge est le service de levage de{' '}
+              <a
+                href="https://batimove.ch"
+                target="_blank"
                 rel="noopener noreferrer"
-                className="px-5 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-xs sm:text-sm font-semibold rounded-lg transition-colors inline-flex items-center gap-2"
+                className="text-[#0A192F] font-semibold underline underline-offset-4 decoration-slate-300 hover:decoration-[#0A192F] transition-colors"
               >
-                <span>Découvrir batimove.ch</span>
-                <span>↗</span>
+                BatiMove Sàrl
               </a>
-            </div>
+              , inscrite au registre du commerce de Genève. Nous montons et descendons par la façade ce qui ne passe
+              pas par l’escalier.
+            </p>
+            <a
+              href="https://batimove.ch"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block py-1 text-base font-semibold text-[#0A192F] underline underline-offset-4 decoration-slate-300 hover:decoration-[#0A192F] transition-colors"
+            >
+              Découvrir batimove.ch
+            </a>
           </div>
+        </Reveal>
+
+        <div className="mt-10 md:mt-14 grid sm:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-5">
+          {/* Vidéo d'intervention réelle */}
+          <Reveal className="sm:col-span-2 lg:col-span-5 lg:row-span-2">
+            <div
+              ref={frameRef}
+              className="relative aspect-[4/5] sm:aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[35rem] rounded-[28px] overflow-hidden bg-[#0A192F] select-none"
+            >
+              <video
+                ref={videoRef}
+                src={inView ? liftVideo() : undefined}
+                poster="/assets/batimove-lift-poster.webp"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="none"
+                className="absolute inset-0 w-full h-full object-cover object-[center_35%]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F]/80 via-transparent to-transparent pointer-events-none" />
+              <button
+                type="button"
+                onClick={togglePlay}
+                aria-label={isPlaying ? 'Mettre la vidéo en pause' : 'Lire la vidéo'}
+                className="absolute inset-0 w-full h-full flex items-center justify-center rounded-[28px] focus-visible:-outline-offset-4"
+              >
+                <span
+                  aria-hidden="true"
+                  className={`w-14 h-14 rounded-full bg-white text-[#0A192F] flex items-center justify-center transition-[opacity,scale] duration-200 ${
+                    isPlaying ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+                  }`}
+                >
+                  <Play size={22} className="translate-x-0.5 fill-current" />
+                </span>
+              </button>
+              <span className="absolute bottom-6 left-6 right-6 text-white text-[14px] leading-snug font-medium pointer-events-none">
+                Levage au 3ᵉ&nbsp;étage, en vidéo
+              </span>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.06} className={`${CARD} sm:col-span-2 lg:col-span-4 bg-[#0A192F] text-white`}>
+            <h3 className={`${CARD_TITLE} text-white text-[30px] sm:text-[36px]`}>
+              Jusqu’au 10<sup>e</sup>&nbsp;étage, 500&nbsp;kg par montée.
+            </h3>
+            <p className="mt-3 text-base leading-relaxed text-white/80">
+              Mobilier, pianos, vitrages et matériaux de chantier.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.12} className={`${CARD} lg:col-span-3 bg-[#0052A3] text-white`}>
+            <h3 className={`${CARD_TITLE} text-white text-[24px] sm:text-[26px]`}>Opérateur formé SUVA</h3>
+            <p className="mt-3 text-[15px] leading-relaxed text-white/85">
+              Un opérateur formé aux prescriptions SUVA installe et pilote l’échelle à chaque intervention.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.12} className={`${CARD} lg:col-span-3 bg-white text-[#0A192F]`}>
+            <h3 className={`${CARD_TITLE} text-[24px] sm:text-[26px]`}>Voirie prise en charge</h3>
+            <p className="mt-3 text-[15px] leading-relaxed text-slate-600">
+              Nous préparons la demande d’occupation du domaine public auprès de votre commune.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.18} className={`${CARD} sm:col-span-2 lg:col-span-4 bg-white text-[#0A192F]`}>
+            <h3 className={`${CARD_TITLE} text-[30px] sm:text-[36px]`}>RC professionnelle</h3>
+            <p className="mt-3 text-base leading-relaxed text-slate-600">
+              Chaque intervention est couverte jusqu’à CHF&nbsp;5’000’000.
+            </p>
+          </Reveal>
         </div>
       </div>
     </section>

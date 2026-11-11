@@ -1,161 +1,236 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Phone, ArrowRight, Maximize2 } from 'lucide-react';
-import FeatureCardsV2 from './FeatureCardsV2';
+import React, { useState } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { Phone, Star, ArrowUpRight } from 'lucide-react';
+import { waLink, PHONE_TEL, PHONE_DISPLAY } from '../lib/contact';
+import { WhatsAppGlyph } from './WhatsAppGlyph';
+import { servicePages } from '../data/servicePages';
+import { SERVICE_NAV } from '../lib/serviceNav';
+import { entrancesEnabled } from '../lib/firstPaint';
 
 interface HeroV2Props {
   onOpenQuoteModal?: () => void;
   onImageClick?: (src: string) => void;
+  navigateTo?: (page: string) => void;
 }
 
-export default function HeroV2({ onOpenQuoteModal, onImageClick }: HeroV2Props) {
+const EASE = [0.23, 1, 0.32, 1] as const;
+
+// Ombre du hero sur grand écran. Elle suit la colonne de texte (alignée sur le conteneur
+// max-w-7xl) et s'éteint avant l'échelle, quelle que soit la largeur de la fenêtre.
+const TEXT_LEFT = 'max(3rem, calc((100vw - 80rem) / 2 + 3rem))';
+const SCRIM = `linear-gradient(90deg, rgba(10,25,47,0.78) 0, rgba(10,25,47,0.72) calc(${TEXT_LEFT} + 22rem), rgba(10,25,47,0.52) calc(${TEXT_LEFT} + 38rem), rgba(10,25,47,0.2) calc(${TEXT_LEFT} + 48rem), rgba(10,25,47,0) calc(${TEXT_LEFT} + 58rem))`;
+
+// Largeur réelle d'affichage de la photo (object-cover). Sur téléphone et tablette la section
+// est plus haute que large : la photo est calée sur la hauteur et déborde l'écran en largeur.
+// Les mêmes valeurs servent au <link rel="preload"> de index.html.
+const HERO_SIZES_PORTRAIT = '160vw';
+const HERO_SIZES_WIDE = '(max-width: 1023px) 130vw, 100vw';
+
+const SPECS: { value: React.ReactNode; label: string }[] = [
+  { value: <>10<sup>e</sup>&nbsp;étage</>, label: 'hauteur maximale' },
+  { value: <>500&nbsp;kg</>, label: 'par montée' },
+  { value: 'Opérateur', label: 'formé SUVA, compris' },
+  { value: 'Voirie', label: 'prise en charge' },
+];
+
+// Hero de l'accueil : photo d'intervention réelle en pleine largeur, puis le sélecteur
+// de cas qui chevauche le bas de la photo.
+export default function HeroV2({ onOpenQuoteModal, navigateTo }: HeroV2Props) {
+  const reduce = useReducedMotion();
+  // Pas d'animation d'entrée sur le HTML pré-rendu : seulement après une navigation interne.
+  const [entrance] = useState(entrancesEnabled);
+
+  // Entrée du premier écran : un seul mouvement, décalé de quelques dixièmes par bloc.
+  const rise = (delay: number) =>
+    reduce || !entrance
+      ? {}
+      : {
+          initial: { opacity: 0, y: 22 },
+          animate: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE, delay } },
+        };
+
   return (
-    <section className="relative w-full overflow-hidden bg-white text-slate-900 pt-28 sm:pt-32 lg:pt-36">
-      
-      {/* ── Main Hero Stage Container ── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          {/* ── LEFT COLUMN: Antigravity-Grade Typography & Direct CTAs ── */}
-          <motion.div 
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5 flex flex-col items-start text-left z-20"
-          >
-            {/* Swiss Precision Typographic Category */}
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.18em] text-[#0052A3] mb-1.5 font-sans">
-              Logistique Verticale • Genève & Vaud
-            </p>
+    <>
+      <section className="relative isolate bg-[#0A192F] text-white">
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <picture>
+            {/* Sur téléphone la photo est calée sur la hauteur de la section : elle s'affiche plus large que l'écran. */}
+            <source
+              media="(max-width: 767px)"
+              type="image/avif"
+              srcSet="/assets/hero/facade-portrait-1000.avif 1000w, /assets/hero/facade-portrait-1400.avif 1400w"
+              sizes={HERO_SIZES_PORTRAIT}
+            />
+            <source
+              media="(max-width: 767px)"
+              type="image/webp"
+              srcSet="/assets/hero/facade-portrait-1000.webp 1000w, /assets/hero/facade-portrait-1400.webp 1400w"
+              sizes={HERO_SIZES_PORTRAIT}
+            />
+            <source
+              type="image/avif"
+              srcSet="/assets/hero/facade-wide-960.avif 960w, /assets/hero/facade-wide-1360.avif 1360w, /assets/hero/facade-wide-1920.avif 1920w"
+              sizes={HERO_SIZES_WIDE}
+            />
+            <img
+              src="/assets/hero/facade-wide-1360.webp"
+              srcSet="/assets/hero/facade-wide-960.webp 960w, /assets/hero/facade-wide-1360.webp 1360w, /assets/hero/facade-wide-1920.webp 1920w"
+              sizes={HERO_SIZES_WIDE}
+              alt="Monte-meuble BatiMove déployé le long de la façade d’un immeuble, jusqu’aux étages supérieurs"
+              width={1360}
+              height={1500}
+              fetchPriority="high"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover object-[50%_22%] md:object-[60%_8%]"
+            />
+          </picture>
+          {/* Ombre neutre, sans teinte : uniforme tant que le texte couvre la photo, puis
+              limitée à la colonne de texte pour laisser l'échelle et la façade au naturel. */}
+          <div className="absolute inset-0 bg-[#0A192F]/60 lg:hidden" />
+          <div className="absolute inset-0 hidden lg:block" style={{ background: SCRIM }} />
+          <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#0A192F]/55 to-transparent" />
+        </div>
 
-            {/* Verified Google Business Profile Handshake */}
-            <a 
-              href="https://www.google.com/search?q=Location+monte-meuble+BATIMOVE+SARL" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-700 hover:text-[#0052A3] transition-colors mb-4 group cursor-pointer"
-              title="Consulter la fiche officielle Location monte-meuble BATIMOVE SARL sur Google"
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 pt-28 sm:pt-36 lg:pt-40 pb-36 sm:pb-44 lg:min-h-[min(100svh,900px)] flex flex-col justify-center">
+          <div className="max-w-[50rem]">
+            <motion.h1
+              {...rise(0)}
+              className="font-display font-semibold text-[38px] leading-[1.04] sm:text-[56px] xl:text-[62px] tracking-[-0.035em] text-white"
             >
-              <span className="text-[#F59E0B] tracking-tight text-sm">★★★★★</span>
-              <span className="font-extrabold text-slate-950">5.0</span>
-              <span className="text-slate-500 font-medium group-hover:underline">sur Google (4 avis clients vérifiés)</span>
-            </a>
+              <span className="block">Trop grand pour l’escalier&nbsp;?</span>
+              <span className="block">On passe par la fenêtre.</span>
+            </motion.h1>
 
-            {/* Monumental Headline with Antigravity Strict Optical Kerning */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[50px] xl:text-[56px] font-display font-black text-slate-950 tracking-[-0.035em] leading-[1.05] mb-5">
-              <span>Location Monte-Meuble</span> <br />
-              <span className="bg-gradient-to-r from-[#0052A3] via-[#0066CC] to-[#0A2540] bg-clip-text text-transparent">
-                Genève & Vaud
-              </span>
-            </h1>
+            <motion.p
+              {...rise(0.08)}
+              className="mt-5 sm:mt-7 max-w-[34rem] text-[16px] sm:text-[19px] leading-[1.55] text-white/85"
+            >
+              Location de monte-meuble avec opérateur à Genève et dans le canton de Vaud. Canapé, piano, armoire ou
+              vitrage montent par la façade, sans passer par la cage d’escalier.
+            </motion.p>
 
-            {/* Crisp High-Legibility Subtitle (Audited by Senior Swiss Legal Counsel) */}
-            <p className="text-slate-600 text-sm sm:text-base lg:text-[17px] leading-relaxed mb-7 max-w-xl font-normal text-pretty">
-              Passage sécurisé de canapés, pianos et matériaux volumineux par fenêtre ou balcon jusqu'au 10ᵉ étage (500 kg). Opérateur qualifié formé aux normes SUVA et prise en charge des démarches de voirie communale.
-            </p>
+            <motion.div {...rise(0.16)}>
+              <div className="mt-7 sm:mt-9 flex flex-col sm:flex-row gap-3">
+                <a
+                  href={waLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="press inline-flex items-center justify-center gap-2.5 h-14 px-7 rounded-full bg-[#E10600] hover:bg-[#C80500] text-white text-[16px] font-semibold"
+                >
+                  <WhatsAppGlyph className="w-5 h-5" />
+                  Devis gratuit sur WhatsApp
+                </a>
+                <a
+                  href={PHONE_TEL}
+                  className="press inline-flex items-center justify-center gap-2.5 h-14 px-7 rounded-full border border-white/40 hover:border-white text-white text-[16px] transition-colors"
+                >
+                  <Phone size={17} aria-hidden="true" />
+                  <span className="font-display font-semibold tabular-nums">{PHONE_DISPLAY}</span>
+                  <span className="text-white/75 text-[14px]">gratuit</span>
+                </a>
+              </div>
 
-            {/* High-Conversion Direct Action CTAs */}
-            <div className="flex flex-wrap items-center gap-3.5 sm:gap-4 w-full sm:w-auto mb-6">
-              <button 
-                type="button"
-                onClick={onOpenQuoteModal}
-                className="group relative px-7 sm:px-8 py-3.5 sm:py-4 bg-[#E10600] hover:bg-[#C80500] text-white text-xs sm:text-sm font-bold rounded-xl uppercase tracking-wider transition-all duration-300 shadow-[0_8px_25px_rgba(225,6,0,0.32)] hover:shadow-[0_12px_32px_rgba(225,6,0,0.48)] hover:-translate-y-0.5 active:translate-y-0 inline-flex items-center gap-2.5 cursor-pointer overflow-hidden"
-              >
-                <span className="relative z-10">Demander un devis estimatif</span>
-                <ArrowRight size={15} className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
+              <p className="mt-4 max-w-[34rem] text-[14px] leading-relaxed text-white/80">
+                Envoyez une photo de l’objet, l’étage et la commune. Nous répondons avec le devis.{' '}
+                <button
+                  type="button"
+                  onClick={onOpenQuoteModal}
+                  className="font-semibold text-white underline underline-offset-4 decoration-white/45 hover:decoration-white transition-colors"
+                >
+                  Remplir le formulaire
+                </button>
+              </p>
 
               <a
-                href="tel:0800825925"
-                className="px-6 py-3.5 sm:py-4 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/90 text-slate-900 text-xs sm:text-sm font-bold tracking-wide transition-all duration-200 inline-flex items-center gap-2 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-slate-300 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                href="https://www.google.com/search?q=Location+monte-meuble+BATIMOVE+SARL"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex items-center gap-2.5 py-1 text-[14px] text-white/90 hover:text-white transition-colors"
               >
-                <Phone size={15} className="text-[#0052A3]" />
-                <span>0800 825 925 (Gratuit)</span>
+                <span className="flex gap-0.5" aria-hidden="true">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <Star key={i} size={14} fill="currentColor" strokeWidth={0} />
+                  ))}
+                </span>
+                <span className="underline underline-offset-4 decoration-white/40">5,0 sur Google, 4&nbsp;avis</span>
               </a>
-            </div>
+            </motion.div>
 
-            {/* Live Operational Status (Pure clean text, no pill) */}
-            <p className="text-xs text-slate-500 font-medium">
-              Intervention sur réservation ou urgence selon planning • Devis sans engagement sur WhatsApp
-            </p>
-          </motion.div>
-
-          {/* ── RIGHT COLUMN: Authentic Swiss Reality Duo (Vaud & Alps Panoramic Perspective) ── */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.98, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7 relative flex items-center justify-center lg:justify-end"
-          >
-            {/* Ambient 3D Depth Glow behind Duo Stage */}
-            <div 
-              className="absolute -inset-2 sm:-inset-4 bg-gradient-to-tr from-[#0052A3]/10 via-[#38BDF8]/06 to-transparent rounded-3xl blur-2xl pointer-events-none -z-10" 
-              aria-hidden="true"
-            />
-
-            {/* 3D Contact Floor Shadow */}
-            <div 
-              className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[92%] h-8 bg-slate-950/20 blur-xl rounded-[100%] pointer-events-none -z-10" 
-              aria-hidden="true"
-            />
-
-            {/* Dual Authentic Swiss Photos: Natural Staggered Grid */}
-            <div className="grid grid-cols-12 gap-3 sm:gap-4 w-full items-center">
-              
-              {/* Photo 1: Vertical Portrait Road & Mountain Perspective (col-span-5) */}
-              <div 
-                onClick={() => onImageClick?.('/assets/hero-swiss-road.jpg')}
-                className="col-span-5 relative rounded-2xl lg:rounded-3xl overflow-hidden border border-slate-200/90 ring-1 ring-black/[0.04] shadow-[0_20px_50px_rgba(10,25,47,0.12)] bg-slate-100 group cursor-pointer transition-all duration-500 hover:shadow-[0_28px_60px_rgba(0,82,163,0.18)] hover:-translate-y-1"
-                title="Cliquer pour afficher la vue route en plein écran"
-              >
-                <picture>
-                  <source srcSet="/assets/hero-swiss-road.webp" type="image/webp" />
-                  <img 
-                    src="/assets/hero-swiss-road.jpg" 
-                    alt="Camion Monte-Meuble BatiMove sur route de montagne en direction des sommets suisses" 
-                    className="w-full h-auto object-cover object-center block select-none filter contrast-[1.03] saturate-[1.04] transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-                    loading="eager"
-                    fetchPriority="high"
-                  />
-                </picture>
-
-                {/* Subtle hover zoom trigger */}
-                <div className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-950/60 backdrop-blur-md text-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
-                  <Maximize2 size={13} />
+            <motion.dl
+              {...rise(0.24)}
+              className="mt-8 sm:mt-10 pt-6 max-w-[44rem] border-t border-white/20 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4"
+            >
+              {SPECS.map((s) => (
+                <div key={s.label}>
+                  <dt className="font-display font-semibold text-[17px] sm:text-[18px] tracking-[-0.01em] text-white">
+                    {s.value}
+                  </dt>
+                  <dd className="mt-0.5 text-[13px] leading-snug text-white/75">{s.label}</dd>
                 </div>
-              </div>
-
-              {/* Photo 2: Horizontal Panoramic Alps & Forchex Profile (col-span-7) */}
-              <div 
-                onClick={() => onImageClick?.('/assets/hero-swiss-profile.jpg')}
-                className="col-span-7 relative rounded-2xl lg:rounded-3xl overflow-hidden border border-slate-200/90 ring-1 ring-black/[0.04] shadow-[0_24px_60px_rgba(10,25,47,0.15)] bg-slate-100 group cursor-pointer transition-all duration-500 hover:shadow-[0_32px_70px_rgba(0,82,163,0.20)] hover:-translate-y-1"
-                title="Cliquer pour afficher le panorama des Alpes en plein écran"
-              >
-                <picture>
-                  <source srcSet="/assets/hero-swiss-profile.webp" type="image/webp" />
-                  <img 
-                    src="/assets/hero-swiss-profile.jpg" 
-                    alt="Camion Monte-Meuble BatiMove face au panorama des Alpes suisses et panneau Forchex (Vaud)" 
-                    className="w-full h-auto object-cover object-center block select-none filter contrast-[1.03] saturate-[1.04] transition-transform duration-700 ease-out group-hover:scale-[1.025]"
-                    loading="eager"
-                    fetchPriority="high"
-                  />
-                </picture>
-
-                {/* Subtle hover zoom trigger */}
-                <div className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 z-10 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-950/60 backdrop-blur-md text-white/90 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
-                  <Maximize2 size={13} />
-                </div>
-              </div>
-
-            </div>
-          </motion.div>
-
+              ))}
+            </motion.dl>
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* ── Grounded Swiss Architectural Specification Bar ── */}
-      <FeatureCardsV2 />
-    </section>
+      <div className="relative z-10 -mt-24 sm:-mt-28">
+        <motion.div {...rise(0.32)} className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+          <div className="rounded-[28px] bg-white p-5 sm:p-8 shadow-[0_28px_70px_-28px_rgba(10,25,47,0.45)]">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-1.5 sm:gap-8">
+              <h2 className="shrink-0 whitespace-nowrap font-display font-semibold text-[24px] sm:text-[30px] leading-[1.1] tracking-[-0.03em] text-[#0A192F]">
+                Que faut-il monter&nbsp;?
+              </h2>
+              <p className="text-[15px] leading-relaxed text-slate-600 sm:text-right">
+                Choisissez votre cas pour voir comment se déroule l’intervention.
+              </p>
+            </div>
+
+            <ul className="mt-5 sm:mt-7 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2.5 sm:gap-3">
+              {SERVICE_NAV.map(({ slug, Icon }) => (
+                <li key={slug}>
+                  <a
+                    href={`/${slug}`}
+                    onClick={(e) => {
+                      if (!navigateTo) return;
+                      e.preventDefault();
+                      navigateTo(slug);
+                    }}
+                    className="press group flex h-full min-h-[120px] sm:min-h-[136px] flex-col justify-between rounded-[20px] bg-[#F1F5F8] hover:bg-[#E2E8F0] p-4 sm:p-5 transition-colors duration-200"
+                  >
+                    <span className="flex items-start justify-between">
+                      <Icon size={28} strokeWidth={1.5} className="text-[#0052A3]" aria-hidden="true" />
+                      <ArrowUpRight
+                        size={18}
+                        aria-hidden="true"
+                        className="text-slate-500 group-hover:text-[#0A192F] transition-colors duration-200"
+                      />
+                    </span>
+                    <span className="mt-4 font-display font-semibold text-[15px] sm:text-[17px] leading-[1.2] tracking-[-0.01em] text-[#0A192F]">
+                      {servicePages[slug].navLabel}
+                    </span>
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a
+                  href={waLink()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="press group flex h-full min-h-[120px] sm:min-h-[136px] flex-col justify-between rounded-[20px] bg-[#0A192F] hover:bg-[#0F2440] p-4 sm:p-5 transition-colors duration-200"
+                >
+                  <span className="flex items-start justify-between text-white">
+                    <WhatsAppGlyph className="w-7 h-7" />
+                    <ArrowUpRight size={18} aria-hidden="true" className="text-white/70 group-hover:text-white transition-colors duration-200" />
+                  </span>
+                  <span className="mt-4 font-display font-semibold text-[15px] sm:text-[17px] leading-[1.2] tracking-[-0.01em] text-white">
+                    Autre objet
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </motion.div>
+      </div>
+    </>
   );
 }

@@ -13,6 +13,8 @@ export default defineConfig(() => {
     },
     build: {
       sourcemap: false,
+      // Lu par scripts/prerender.mjs pour précharger les chunks de chaque page
+      manifest: true,
     },
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',

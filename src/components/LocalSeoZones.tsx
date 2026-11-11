@@ -1,178 +1,189 @@
-import React from 'react';
-import { Clock, ShieldCheck, Phone, ArrowRight } from 'lucide-react';
-
-interface ZoneHub {
-  region: string;
-  eta: string;
-  description: string;
-  cities: string[];
-}
-
-const zones: ZoneHub[] = [
-  {
-    region: "Canton de Genève",
-    eta: "Intervention réactive",
-    description: "Intervention sur rendez-vous ou urgence en hypercentre, vieilles rues pavées et cours intérieures. Démarches de voirie SEP et balisage de sécurité réglementaire assurés.",
-    cities: [
-      "Genève Centre", "Carouge", "Eaux-Vives",
-      "Plainpalais", "Champel", "Servette",
-      "Meyrin", "Lancy", "Vernier",
-      "Cologny", "Chêne-Bougeries", "Versoix"
-    ]
-  },
-  {
-    region: "Canton de Vaud & La Côte",
-    eta: "Intervention réactive",
-    description: "Couverture continue de La Côte à la Riviera. Levage télescopique pour copropriétés, appartements en attique, villas et chantiers.",
-    cities: [
-      "Nyon", "Morges", "Lausanne",
-      "Gland", "Rolle", "Renens",
-      "Pully", "Lutry", "Vevey",
-      "Montreux", "Saint-Prex", "Coppet"
-    ]
-  }
-];
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { useReducedMotion } from 'motion/react';
+import { frTypo } from '../lib/typo';
+import Reveal from './Reveal';
 
 interface LocalSeoZonesProps {
   onOpenQuoteModal?: () => void;
   navigateTo?: (page: string) => void;
 }
 
-const cityRouteMap: Record<string, string> = {
-  "Genève Centre": "geneve",
-  "Carouge": "carouge",
-  "Plainpalais": "plainpalais",
-  "Eaux-Vives": "eaux-vives",
-  "Champel": "eaux-vives",
-  "Cologny": "eaux-vives",
-  "Meyrin": "meyrin",
-  "Vernier": "meyrin",
-  "Lausanne": "lausanne",
-  "Nyon": "nyon",
-  "Gland": "nyon",
-  "Coppet": "nyon",
-  "Morges": "morges",
-  "Rolle": "morges",
-  "Saint-Prex": "morges",
-  "Vevey": "vevey",
-  "Montreux": "vevey",
-};
+// Une carte par commune où nous avons une photo d'intervention prise sur place.
+// Les autres communes figurent dans la liste, sans photo empruntée ailleurs.
+const CARDS: { route: string; city: string; file: string; detail: string }[] = frTypo([
+  { route: 'geneve', city: 'Genève', file: '11.webp', detail: 'Piano à queue au 8ᵉ étage, Florissant' },
+  { route: 'carouge', city: 'Carouge', file: '6.webp', detail: 'Cour intérieure étroite, 2ᵉ étage' },
+  { route: 'plainpalais', city: 'Plainpalais', file: '3.webp', detail: 'Matériaux de rénovation au 6ᵉ étage' },
+  { route: 'eaux-vives', city: 'Eaux-Vives', file: '2.webp', detail: 'Déménagement au 4ᵉ étage' },
+  { route: 'lausanne', city: 'Lausanne', file: '20.webp', detail: 'Meubles au 6ᵉ étage' },
+  { route: 'nyon', city: 'Nyon', file: '4.webp', detail: 'Canapé monobloc au 3ᵉ étage' },
+  { route: 'morges', city: 'Morges', file: '8.webp', detail: 'Cuisine en quartz au 4ᵉ étage' },
+]);
 
-export default function LocalSeoZones({ onOpenQuoteModal, navigateTo }: LocalSeoZonesProps) {
+const REGIONS: { name: string; cities: { label: string; route?: string }[] }[] = [
+  {
+    name: 'Canton de Genève',
+    cities: [
+      { label: 'Genève centre', route: 'geneve' },
+      { label: 'Carouge', route: 'carouge' },
+      { label: 'Plainpalais', route: 'plainpalais' },
+      { label: 'Eaux-Vives', route: 'eaux-vives' },
+      { label: 'Champel', route: 'eaux-vives' },
+      { label: 'Cologny', route: 'eaux-vives' },
+      { label: 'Meyrin', route: 'meyrin' },
+      { label: 'Vernier', route: 'meyrin' },
+      { label: 'Lancy' },
+      { label: 'Servette' },
+      { label: 'Chêne-Bougeries' },
+      { label: 'Versoix' },
+    ],
+  },
+  {
+    name: 'Canton de Vaud',
+    cities: [
+      { label: 'Lausanne', route: 'lausanne' },
+      { label: 'Nyon', route: 'nyon' },
+      { label: 'Gland', route: 'nyon' },
+      { label: 'Coppet', route: 'nyon' },
+      { label: 'Morges', route: 'morges' },
+      { label: 'Rolle', route: 'morges' },
+      { label: 'Saint-Prex', route: 'morges' },
+      { label: 'Vevey', route: 'vevey' },
+      { label: 'Montreux', route: 'vevey' },
+      { label: 'Renens' },
+      { label: 'Pully' },
+      { label: 'Lutry' },
+    ],
+  },
+];
+
+const ARROW =
+  'press w-12 h-12 inline-flex items-center justify-center rounded-full border border-slate-300 text-[#0A192F] hover:border-[#0A192F] transition-colors duration-200 disabled:opacity-35 disabled:hover:border-slate-300 disabled:cursor-default';
+
+export default function LocalSeoZones({ navigateTo }: LocalSeoZonesProps) {
+  const trackRef = useRef<HTMLUListElement>(null);
+  const reduce = useReducedMotion();
+  const [edges, setEdges] = useState({ start: true, end: false });
+
+  // Les flèches se désactivent en bout de piste.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const update = () =>
+      setEdges({
+        start: el.scrollLeft <= 4,
+        end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 4,
+      });
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    return () => {
+      el.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  const slide = (dir: 1 | -1) => {
+    const el = trackRef.current;
+    const card = el?.querySelector('li');
+    if (!el || !card) return;
+    const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+    el.scrollBy({ left: dir * (card.getBoundingClientRect().width + gap), behavior: reduce ? 'auto' : 'smooth' });
+  };
+
+  const go = (route: string) => (e: React.MouseEvent) => {
+    if (!navigateTo) return;
+    e.preventDefault();
+    navigateTo(route);
+  };
+
   return (
-    <section id="zones" className="py-12 md:py-16 bg-[#F1F5F8] border-t border-slate-200/80 relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
-        
-        {/* Minimal Header without pills */}
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold text-[#0A192F] tracking-tight leading-tight mb-2.5">
-            Zones d'Intervention <span className="text-[#0052A3]">— Genève & Vaud</span>
-          </h2>
-          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-            Déploiement direct dans votre commune. Passage par fenêtre ou balcon jusqu'au 10ᵉ étage avec opérateur qualifié formé aux normes SUVA et démarches de voirie prises en charge.
-          </p>
-        </div>
+    <section id="zones" className="bg-white py-16 md:py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+        <Reveal className="flex items-end justify-between gap-8">
+          <div className="max-w-2xl">
+            <h2 className="font-display font-semibold text-[34px] sm:text-[48px] leading-[1.05] tracking-[-0.035em] text-[#0A192F]">
+              Où nous intervenons
+            </h2>
+            <p className="mt-4 max-w-xl text-base sm:text-lg leading-relaxed text-slate-600">
+              Dans tout le canton de Genève et le canton de Vaud, de La Côte à la Riviera. Nous préparons la demande de
+              voirie auprès de chaque commune.
+            </p>
+          </div>
+          <div className="hidden sm:flex gap-2 shrink-0">
+            <button type="button" onClick={() => slide(-1)} disabled={edges.start} aria-label="Communes précédentes" className={ARROW}>
+              <ArrowLeft size={20} aria-hidden="true" />
+            </button>
+            <button type="button" onClick={() => slide(1)} disabled={edges.end} aria-label="Communes suivantes" className={ARROW}>
+              <ArrowRight size={20} aria-hidden="true" />
+            </button>
+          </div>
+        </Reveal>
 
-        {/* 2 Regional Hub Cards - Ultra-clean Apple layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {zones.map((zone, idx) => (
-            <div 
-              key={idx}
-              className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/80 shadow-[0_4px_20px_rgba(10,25,47,0.04)] hover:shadow-[0_12px_32px_rgba(0,82,163,0.08)] transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                {/* Header: Title + Clean Text ETA (No pills) */}
-                <div className="flex items-baseline justify-between pb-3.5 mb-3.5 border-b border-slate-100">
-                  <h3 className="text-lg sm:text-xl font-display font-extrabold text-[#0A192F]">
-                    {zone.region}
-                  </h3>
-                  <span className="text-xs font-semibold text-emerald-600 flex items-center gap-1.5">
-                    <Clock size={13} className="shrink-0" />
-                    <span>{zone.eta}</span>
+        <ul
+          ref={trackRef}
+          className="mt-8 md:mt-12 -mx-4 px-4 scroll-px-4 sm:-mx-6 sm:px-6 sm:scroll-px-6 md:-mx-12 md:px-12 md:scroll-px-12 lg:mx-0 lg:px-0 lg:scroll-px-0 flex gap-4 md:gap-5 overflow-x-auto overscroll-x-contain snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {CARDS.map((c) => (
+            <li key={c.route} className="snap-start shrink-0 w-[72vw] sm:w-[300px] lg:w-[calc((100%-3*1.25rem)/4)]">
+              <a
+                href={`/${c.route}`}
+                onClick={go(c.route)}
+                className="group relative block aspect-[3/4] overflow-hidden rounded-[28px] bg-[#0A192F] focus-visible:-outline-offset-4"
+              >
+                <img
+                  src={`/assets/work/md/${c.file}`}
+                  alt={`${c.detail}, ${c.city}`}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.04] motion-reduce:transition-none"
+                />
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#0A192F] via-[#0A192F]/55 to-transparent"
+                />
+                <span
+                  aria-hidden="true"
+                  className="absolute top-4 right-4 w-10 h-10 inline-flex items-center justify-center rounded-full bg-white text-[#0A192F]"
+                >
+                  <ArrowUpRight size={18} />
+                </span>
+                <span className="absolute inset-x-0 bottom-0 p-6 text-white">
+                  <span className="block font-display font-semibold text-[26px] sm:text-[28px] leading-[1.1] tracking-[-0.03em]">
+                    {c.city}
                   </span>
-                </div>
-
-                <p className="text-slate-600 text-xs sm:text-[13px] leading-relaxed mb-5">
-                  {zone.description}
-                </p>
-
-                {/* Communes Grid - 3 Columns Clean Typographic List */}
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2.5">
-                    Communes desservies au tarif local
-                  </div>
-                  <div className="grid grid-cols-3 gap-x-2 gap-y-2 text-xs">
-                    {zone.cities.map((city, cIdx) => {
-                      const route = cityRouteMap[city];
-                      return (
-                        <div 
-                          key={cIdx} 
-                          className="flex items-center gap-1.5 text-slate-700"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#0052A3]/60 shrink-0" />
-                          {route && navigateTo ? (
-                            <a
-                              href={`/${route}`}
-                              onClick={(e) => { e.preventDefault(); navigateTo(route); }}
-                              className="truncate font-medium text-left hover:text-[#0052A3] hover:underline cursor-pointer transition-colors"
-                              title={`Accéder à la page dédiée Location Monte-Meuble ${city}`}
-                            >
-                              {city}
-                            </a>
-                          ) : (
-                            <span className="truncate font-medium">{city}</span>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Discreet Trust Footer */}
-              <div className="pt-4 mt-5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                <span className="flex items-center gap-1.5 text-slate-600">
-                  <ShieldCheck size={14} className="text-[#0052A3]" />
-                  Assurance RC Pro jusqu'à 5M CHF
+                  <span className="mt-1.5 block text-[14px] leading-snug text-white/85">{c.detail}</span>
                 </span>
-                <span className="text-[#0052A3] font-semibold">
-                  Démarches voirie prises en charge
-                </span>
-              </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-10 md:mt-14 border-t border-slate-200">
+          {REGIONS.map((r) => (
+            <div key={r.name} className="grid lg:grid-cols-[220px_1fr] gap-3 lg:gap-8 py-6 border-b border-slate-200">
+              <h3 className="font-display font-semibold text-lg tracking-[-0.01em] text-[#0A192F]">{r.name}</h3>
+              <ul className="flex flex-wrap gap-x-6 gap-y-2 text-base">
+                {r.cities.map((c) => (
+                  <li key={c.label}>
+                    {c.route && navigateTo ? (
+                      <a
+                        href={`/${c.route}`}
+                        onClick={go(c.route)}
+                        className="inline-block py-0.5 text-[#0A192F] underline underline-offset-4 decoration-slate-300 hover:decoration-[#0A192F] transition-colors"
+                      >
+                        {c.label}
+                      </a>
+                    ) : (
+                      <span className="inline-block py-0.5 text-slate-600">{c.label}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
-
-        {/* Compact Fast Action Banner */}
-        <div className="rounded-2xl bg-[#0A192F] text-white p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
-          <div className="text-center sm:text-left">
-            <h4 className="text-sm sm:text-base font-display font-bold text-white">
-              Votre meuble ne passe pas dans la cage d'escalier ?
-            </h4>
-            <p className="text-xs text-slate-300">
-              Intervention sur réservation ou créneau d'urgence selon planning à Genève et Vaud.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2.5 shrink-0">
-            <button
-              type="button"
-              onClick={onOpenQuoteModal}
-              className="px-4 py-2.5 bg-[#E10600] hover:bg-[#C80500] text-white text-xs font-bold rounded-lg uppercase tracking-wider transition-all shadow-md hover:-translate-y-0.5 cursor-pointer inline-flex items-center gap-1.5"
-            >
-              <span>Devis WhatsApp</span>
-              <ArrowRight size={13} />
-            </button>
-            <a
-              href="tel:0800825925"
-              className="px-3.5 py-2.5 bg-white/10 hover:bg-white/15 border border-white/20 text-white text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer"
-            >
-              <Phone size={13} />
-              <span>0800 825 925</span>
-            </a>
-          </div>
-        </div>
-
       </div>
     </section>
   );

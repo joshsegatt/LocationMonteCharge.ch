@@ -1,34 +1,101 @@
-import { cn } from '../lib/utils';
-
 /**
- * MCLogo — Logótipo oficial BatiMove / Monte-Charge Suisse
- * Componente único partilhado por App.tsx e HeroReferenceTier.tsx
+ * MCLogo : le camion monte-meuble de BatiMove en volume, échelle déployée et charge rouge en haut.
+ * Géométrie générée à partir d'un modèle 3D (projection orthographique), trois teintes par volume.
+ * Toujours affiché à côté du nom en toutes lettres, donc masqué aux lecteurs d'écran.
+ * `size` est la hauteur. `onDark` : camion blanc, pour la photo du hero et le pied de page.
  */
-export const MCLogo = ({ size = 36, className = "" }: { size?: number; className?: string }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 100 100"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={cn("filter drop-shadow-[0_2px_8px_rgba(0,82,163,0.25)]", className)}
-    aria-label="Logo Monte-Charge BatiMove"
-    role="img"
-  >
-    <rect x="15" y="70" width="70" height="6" rx="3" fill="#0052A3" />
-    <path
-      d="M15 70V55C15 52.2386 17.2386 50 20 50H45C47.7614 50 50 52.2386 50 55V70H15Z"
-      fill="#0052A3"
-    />
-    <rect x="25" y="55" width="15" height="8" rx="1.5" fill="#FFFFFF" />
-    <g transform="translate(45 65) rotate(-35)">
-      <rect x="0" y="-3" width="40" height="6" rx="3" fill="#E10600" />
-      <rect x="35" y="-3" width="30" height="6" rx="3" fill="#0066CC" />
-      <circle cx="0" cy="0" r="4" fill="#FFFFFF" stroke="#0052A3" strokeWidth="1.5" />
-    </g>
-    <circle cx="28" cy="76" r="8" fill="#0A192F" stroke="#0066CC" strokeWidth="2.5" />
-    <circle cx="28" cy="76" r="3" fill="#E10600" />
-    <circle cx="72" cy="76" r="8" fill="#0A192F" stroke="#0066CC" strokeWidth="2.5" />
-    <circle cx="72" cy="76" r="3" fill="#E10600" />
-  </svg>
-);
+type Tone = Record<string, string>;
+
+const LIGHT: Tone = { under: '#0A192F', deckFront: '#102A4E', deckFlank: '#193653', deckTop: '#2B5F94', turretFront: '#102A4E', turretFlank: '#173663', turretTop: '#24629D', bodyTop: '#3F88C5', bodyFront: '#173663', bodySlope: '#1D4A7E', glass: '#DCEBF8', bodyFlank: '#24629D', glassSide: '#EAF3FB', grille: '#0A192F', lamp: '#FFFFFF', bumperFront: '#0A192F', bumper: '#0A192F', bumperTop: '#163258', ladderEnd: '#102A4E', ladderFlank: '#193653', ladderTop: '#3F88C5', ladderFlank2: '#24629D', redFront: '#B80500', redFlank: '#E10600', redTop: '#F4523A', cross: '#FFFFFF', legFront: '#6F86A0', leg: '#9FB3C8', arch: '#0A192F', tireBack: '#050C18', tire: '#0A192F', rim: '#DCE5EE', hub: '#24629D' };
+const DARK: Tone = { under: '#0A192F', deckFront: '#7F97B0', deckFlank: '#9FB3C8', deckTop: '#C4D2E0', turretFront: '#9FB3C8', turretFlank: '#C4D2E0', turretTop: '#EEF3F8', bodyTop: '#FFFFFF', bodyFront: '#C4D2E0', bodySlope: '#D6E0EA', glass: '#163258', bodyFlank: '#F1F5F8', glassSide: '#163258', grille: '#0A192F', lamp: '#FFFFFF', bumperFront: '#163258', bumper: '#0A192F', bumperTop: '#163258', ladderEnd: '#C4D2E0', ladderFlank: '#FFFFFF', ladderTop: '#FFFFFF', ladderFlank2: '#E2E8F0', redFront: '#B80500', redFlank: '#E10600', redTop: '#F4523A', cross: '#FFFFFF', legFront: '#9FB3C8', leg: '#C4D2E0', arch: '#0A192F', tireBack: '#050C18', tire: '#0F2440', rim: '#EEF3F8', hub: '#0052A3' };
+
+const VIEW_W = 135.7;
+const VIEW_H = 126.7;
+
+const SHAPES: [string, string][] = [
+  ['under', 'M107.9 117.5L122.9 106.9L122.9 100L107.9 110.6Z'],
+  ['under', 'M9 97.8L107.9 117.5L107.9 110.6L9 90.9Z'],
+  ['under', 'M9 90.9L107.9 110.6L122.9 100L24 80.3Z'],
+  ['deckFront', 'M67.1 104.6L86.9 90.7L86.9 85.6L67.1 99.5Z'],
+  ['deckFlank', 'M3.1 91.8L67.1 104.6L67.1 99.5L3.1 86.7Z'],
+  ['deckTop', 'M3.1 86.7L67.1 99.5L86.9 85.6L22.9 72.8Z'],
+  ['deckFront', 'M62.3 111.5L66 108.8L66 100.9L62.3 103.6Z'],
+  ['deckFlank', 'M39.3 106.9L62.3 111.5L62.3 103.6L39.3 99Z'],
+  ['deckTop', 'M39.3 99L62.3 103.6L66 100.9L43.1 96.4Z'],
+  ['turretFront', 'M41.3 90.9L53.5 82.3L53.5 74.9L41.3 83.5Z'],
+  ['turretFlank', 'M18.4 86.3L41.3 90.9L41.3 83.5L18.4 78.9Z'],
+  ['turretTop', 'M18.4 78.9L41.3 83.5L53.5 74.9L30.6 70.3Z'],
+  ['bodyTop', 'M70.2 76L101.1 82.1L120.9 68.2L90 62.1Z'],
+  ['bodyFront', 'M109.1 118.5L128.8 104.6L128.8 87L109.1 100.9Z'],
+  ['bodySlope', 'M109.1 100.9L128.8 87L120.9 68.2L101.1 82.1Z'],
+  ['glass', 'M109.8 97.9L126.5 86.1L120.2 71.2L103.4 82.9Z'],
+  ['bodyFlank', 'M70.2 110.7L109.1 118.5L109.1 100.9L101.1 82.1L70.2 76Z'],
+  ['glassSide', 'M82.6 94.7L105.4 99.2L99.9 86.1L82.6 82.6Z'],
+  ['grille', 'M114.1 109L124 102L124 96L114.1 103Z'],
+  ['lamp', 'M110.2 111.3L113 109.3L113 104.2L110.2 106.2Z'],
+  ['lamp', 'M125 100.8L127.9 98.8L127.9 93.7L125 95.7Z'],
+  ['bumperFront', 'M111.3 122.4L131.6 108.1L131.6 101.9L111.3 116.2Z'],
+  ['bumper', 'M108.8 121.9L111.3 122.4L111.3 116.2L108.8 115.7Z'],
+  ['bumperTop', 'M108.8 115.7L111.3 116.2L131.6 101.9L129.1 101.4Z'],
+  ['ladderEnd', 'M86.4 49.6L94.9 43.7L90.6 36.7L82.2 42.6Z'],
+  ['ladderFlank', 'M26.4 83.5L86.4 49.6L82.2 42.6L22.2 76.5Z'],
+  ['ladderTop', 'M22.2 76.5L82.2 42.6L90.6 36.7L30.6 70.5Z'],
+  ['ladderEnd', 'M122.5 27.6L128.8 23.1L125.9 18.3L119.5 22.8Z'],
+  ['ladderFlank2', 'M66.7 59L122.5 27.6L119.5 22.8L63.8 54.2Z'],
+  ['ladderTop', 'M63.8 54.2L119.5 22.8L125.9 18.3L70.2 49.7Z'],
+  ['redFront', 'M123.9 32.9L135.7 24.6L135.7 4.2L123.9 12.5Z'],
+  ['redFlank', 'M102.8 28.7L123.9 32.9L123.9 12.5L102.8 8.3Z'],
+  ['redTop', 'M102.8 8.3L123.9 12.5L135.7 4.2L114.5 0Z'],
+  ['cross', 'M110.9 27L115.7 27.9L115.7 14.2L110.9 13.3Z'],
+  ['cross', 'M106.8 21.8L119.8 24.4L119.8 19.4L106.8 16.8Z'],
+  ['legFront', 'M7.9 112.1L10.9 110L10.9 93.3L7.9 95.4Z'],
+  ['leg', 'M4.2 111.3L7.9 112.1L7.9 95.4L4.2 94.6Z'],
+  ['leg', 'M4.2 94.6L7.9 95.4L10.9 93.3L7.2 92.5Z'],
+  ['legFront', 'M9 114.6L13.9 111.1L13.9 109.8L9 113.3Z'],
+  ['legFront', 'M0 112.8L9 114.6L9 113.3L0 111.5Z'],
+  ['leg', 'M0 111.5L9 113.3L13.9 109.8L4.9 108.1Z'],
+  ['legFront', 'M63.5 123.2L66.5 121L66.5 104.3L63.5 106.5Z'],
+  ['leg', 'M59.8 122.4L63.5 123.2L63.5 106.5L59.8 105.7Z'],
+  ['leg', 'M59.8 105.7L63.5 106.5L66.5 104.3L62.8 103.6Z'],
+  ['legFront', 'M64.6 125.7L69.6 122.2L69.6 120.9L64.6 124.4Z'],
+  ['legFront', 'M55.6 123.9L64.6 125.7L64.6 124.4L55.6 122.6Z'],
+  ['leg', 'M55.6 122.6L64.6 124.4L69.6 120.9L60.6 119.1Z'],
+  ['arch', 'M37.6 106.9L37.4 104.9L37 102.9L36.3 100.9L35.3 99L34 97.3L32.6 95.7L31 94.4L29.3 93.3L27.4 92.4L25.6 91.9L23.7 91.7L21.8 91.8L20.1 92.2L18.5 92.9L17.1 93.9L15.8 95.2L14.9 96.7L14.1 98.3L13.7 100.2L13.5 102.1Z'],
+  ['tireBack', 'M38.6 103.4L38.5 101.9L38.2 100.4L37.7 98.9L36.9 97.5L36 96.2L34.9 95L33.7 94L32.4 93.2L31.1 92.6L29.6 92.2L28.2 92L26.9 92.1L25.6 92.4L24.3 92.9L23.3 93.7L22.4 94.6L21.6 95.7L21.1 97L20.7 98.4L20.6 99.8L20.7 101.3L21.1 102.9L21.6 104.3L22.4 105.7L23.3 107.1L24.3 108.2L25.6 109.2L26.9 110.1L28.2 110.7L29.6 111.1L31.1 111.3L32.4 111.2L33.7 110.9L34.9 110.3L36 109.6L36.9 108.6L37.7 107.5L38.2 106.3L38.5 104.9L38.6 103.4Z'],
+  ['tire', 'M34.2 106.6L34.1 105.1L33.7 103.6L33.2 102.1L32.5 100.7L31.5 99.4L30.5 98.2L29.3 97.2L28 96.3L26.6 95.7L25.2 95.3L23.8 95.2L22.4 95.2L21.1 95.5L19.9 96.1L18.8 96.8L17.9 97.8L17.2 98.9L16.6 100.1L16.3 101.5L16.2 103L16.3 104.5L16.6 106L17.2 107.5L17.9 108.9L18.8 110.2L19.9 111.4L21.1 112.4L22.4 113.2L23.8 113.8L25.2 114.2L26.6 114.4L28 114.3L29.3 114L30.5 113.5L31.5 112.7L32.5 111.8L33.2 110.7L33.7 109.4L34.1 108L34.2 106.6Z'],
+  ['rim', 'M30.1 105.8L30 105L29.8 104.1L29.5 103.3L29.1 102.6L28.6 101.8L28 101.2L27.4 100.6L26.7 100.2L25.9 99.8L25.1 99.6L24.4 99.5L23.6 99.6L22.9 99.7L22.2 100L21.6 100.4L21.1 101L20.7 101.6L20.4 102.3L20.3 103L20.2 103.8L20.3 104.7L20.4 105.5L20.7 106.3L21.1 107.1L21.6 107.8L22.2 108.4L22.9 109L23.6 109.4L24.4 109.8L25.1 110L25.9 110.1L26.7 110.1L27.4 109.9L28 109.6L28.6 109.2L29.1 108.7L29.5 108L29.8 107.4L30 106.6L30.1 105.8Z'],
+  ['hub', 'M26.9 105.2L26.8 104.9L26.8 104.6L26.7 104.3L26.5 104L26.3 103.8L26.1 103.6L25.9 103.4L25.6 103.2L25.4 103.1L25.1 103L24.8 103L24.5 103L24.3 103L24 103.1L23.8 103.3L23.7 103.5L23.5 103.7L23.4 103.9L23.3 104.2L23.3 104.5L23.3 104.8L23.4 105.1L23.5 105.4L23.7 105.6L23.8 105.9L24 106.1L24.3 106.3L24.5 106.5L24.8 106.6L25.1 106.7L25.4 106.7L25.6 106.7L25.9 106.7L26.1 106.6L26.3 106.4L26.5 106.2L26.7 106L26.8 105.8L26.8 105.5L26.9 105.2Z'],
+  ['arch', 'M99.4 119.2L99.2 117.2L98.8 115.2L98.1 113.2L97.1 111.3L95.9 109.6L94.4 108L92.8 106.7L91.1 105.6L89.2 104.7L87.4 104.2L85.5 104L83.7 104.1L81.9 104.5L80.3 105.2L78.9 106.2L77.6 107.5L76.7 109L75.9 110.7L75.5 112.5L75.4 114.4Z'],
+  ['tireBack', 'M100.5 115.7L100.3 114.2L100 112.7L99.5 111.3L98.7 109.8L97.8 108.5L96.7 107.3L95.5 106.3L94.2 105.5L92.9 104.9L91.4 104.5L90 104.3L88.7 104.4L87.4 104.7L86.2 105.2L85.1 106L84.2 106.9L83.4 108.1L82.9 109.3L82.6 110.7L82.4 112.2L82.6 113.7L82.9 115.2L83.4 116.6L84.2 118.1L85.1 119.4L86.2 120.5L87.4 121.6L88.7 122.4L90 123L91.4 123.4L92.9 123.6L94.2 123.5L95.5 123.2L96.7 122.7L97.8 121.9L98.7 121L99.5 119.8L100 118.6L100.3 117.2L100.5 115.7Z'],
+  ['tire', 'M96 118.9L95.9 117.4L95.6 115.9L95 114.4L94.3 113L93.4 111.7L92.3 110.5L91.1 109.5L89.8 108.6L88.4 108L87 107.6L85.6 107.5L84.2 107.5L82.9 107.8L81.7 108.4L80.6 109.1L79.7 110.1L79 111.2L78.4 112.5L78.1 113.8L78 115.3L78.1 116.8L78.4 118.3L79 119.8L79.7 121.2L80.6 122.5L81.7 123.7L82.9 124.7L84.2 125.5L85.6 126.1L87 126.5L88.4 126.7L89.8 126.6L91.1 126.3L92.3 125.8L93.4 125L94.3 124.1L95 123L95.6 121.7L95.9 120.3L96 118.9Z'],
+  ['rim', 'M91.9 118.1L91.8 117.3L91.6 116.5L91.3 115.6L90.9 114.9L90.4 114.1L89.8 113.5L89.2 112.9L88.5 112.5L87.7 112.1L86.9 111.9L86.2 111.8L85.4 111.9L84.7 112L84 112.3L83.4 112.8L82.9 113.3L82.5 113.9L82.2 114.6L82.1 115.3L82 116.1L82.1 117L82.2 117.8L82.5 118.6L82.9 119.4L83.4 120.1L84 120.7L84.7 121.3L85.4 121.8L86.2 122.1L86.9 122.3L87.7 122.4L88.5 122.4L89.2 122.2L89.8 121.9L90.4 121.5L90.9 121L91.3 120.4L91.6 119.7L91.8 118.9L91.9 118.1Z'],
+  ['hub', 'M88.7 117.5L88.6 117.2L88.6 116.9L88.5 116.6L88.3 116.3L88.1 116.1L87.9 115.9L87.7 115.7L87.4 115.5L87.2 115.4L86.9 115.3L86.6 115.3L86.3 115.3L86.1 115.3L85.9 115.4L85.6 115.6L85.5 115.8L85.3 116L85.2 116.2L85.1 116.5L85.1 116.8L85.1 117.1L85.2 117.4L85.3 117.7L85.5 118L85.6 118.2L85.9 118.4L86.1 118.6L86.3 118.8L86.6 118.9L86.9 119L87.2 119L87.4 119L87.7 119L87.9 118.9L88.1 118.7L88.3 118.5L88.5 118.3L88.6 118.1L88.6 117.8L88.7 117.5Z'],
+];
+
+export const MCLogo = ({
+  size = 44,
+  className = "",
+  onDark = false,
+}: {
+  size?: number;
+  className?: string;
+  onDark?: boolean;
+}) => {
+  const tone = onDark ? DARK : LIGHT;
+
+  return (
+    <svg
+      width={Math.round((size * VIEW_W) / VIEW_H)}
+      height={size}
+      viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-hidden="true"
+      focusable="false"
+    >
+      {SHAPES.map(([key, d], i) => (
+        <path key={i} d={d} fill={tone[key]} />
+      ))}
+    </svg>
+  );
+};

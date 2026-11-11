@@ -1,37 +1,49 @@
 @import "tailwindcss";
 
+/* Ordinaux « ᵉ » et « ʳ » (3ᵉ étage, 1ᵉʳ) : 1,4 Ko, à la place du sous-ensemble latin étendu
+   d'Inter (83 Ko) que ce seul caractère faisait télécharger. Placée en tête des piles de polices. */
+@font-face {
+  font-family: 'Inter Ordinals';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('./assets/fonts/inter-ordinals.woff2') format('woff2');
+  unicode-range: U+02B3, U+1D49;
+}
+
 @theme {
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-  --font-display: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --color-petrol: #0A192F;
-  --color-batimove-blue: #0052A3;
-  --color-batimove-navy: #0A2540;
-  --color-batimove-red: #E10600;
-  --color-batimove-dark: #0A192F;
-  --color-orange: #E10600;
-  --color-steel: #64748B;
-  --color-off-white: #F1F5F8;
-  --color-surface-card: #FFFFFF;
-  --color-surface-subtle: #E2E8F0;
-  /* Border-radius design tokens */
-  --radius-chip: 0.75rem;
-  --radius-card: 1.5rem;
-  --radius-card-lg: 2rem;
-  --radius-card-xl: 2.2rem;
-  --radius-hero: 2.5rem;
+  --font-sans: 'Inter Ordinals', 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Inter Ordinals', 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans', 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+  /* Every Tailwind transition (transition-colors, etc.) uses the same strong ease-out. */
+  --default-transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+:root {
+  /* Motion tokens (see DESIGN.md, section 6) */
+  --ease-ui: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Press feedback for buttons and button-like links. Replaces transition-colors on the element. */
+@utility press {
+  transition-property: color, background-color, border-color, scale;
+  transition-duration: 160ms;
+  transition-timing-function: var(--ease-ui);
+  &:active {
+    scale: 0.97;
+  }
 }
 
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   box-sizing: border-box;
 }
 
-/* Fast tap response (eliminate 300ms mobile touch delay) & explicit pointer cursor */
+/* Fast tap response (no 300ms delay, no grey flash on touch) & explicit pointer cursor */
 a, button, input, select, textarea, [role="button"], label[for] {
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 a, button, [role="button"], input[type="submit"], input[type="button"], summary {
@@ -41,7 +53,7 @@ a, button, [role="button"], input[type="submit"], input[type="button"], summary 
 html {
   scrollbar-gutter: stable;
   scroll-behavior: auto;
-  background-color: #F1F5F8;
+  background-color: #FFFFFF;
   color: #0A192F;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -49,11 +61,10 @@ html {
 }
 
 body {
-  background-color: #F1F5F8;
+  background-color: #FFFFFF;
   color: #0A192F;
   font-family: var(--font-sans);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01", "tnum";
-  font-variant-numeric: tabular-nums;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
   font-optical-sizing: auto;
   letter-spacing: -0.011em;
   line-height: 1.62;
@@ -64,56 +75,21 @@ body {
 @layer base {
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    letter-spacing: -0.025em;
+    letter-spacing: -0.02em;
     text-wrap: balance;
-    font-weight: 800;
+    font-weight: 600;
   }
-  /* Cor padrão em contexto claro — Tailwind utilities sobrescrevem em dark */
+  /* Couleur par défaut sur fond clair. Les utilitaires Tailwind la remplacent sur fond sombre. */
   :where(h1, h2, h3, h4, h5, h6) {
     color: #0A192F;
   }
-}
-
-p {
-  text-wrap: pretty;
-}
-
-.technical-grid {
-  background-image: 
-    linear-gradient(to right, rgba(0, 82, 163, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 82, 163, 0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-
-.card-3d-shadow {
-  box-shadow: 0 10px 30px -10px rgba(0, 82, 163, 0.08), 0 20px 40px -15px rgba(10, 25, 47, 0.05);
-}
-
-.card-3d-shadow-hover {
-  box-shadow: 0 25px 50px -12px rgba(0, 82, 163, 0.16), 0 0 0 1px rgba(0, 82, 163, 0.12);
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #F1F5F9;
-}
-::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  p, li, dd {
+    text-wrap: pretty;
+  }
+  /* Anchor targets clear the fixed header */
+  [id] {
+    scroll-margin-top: 5rem;
+  }
 }
 
 /* Lenis Smooth Scroll Engine */
@@ -137,136 +113,27 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
-/* Advanced 3D Perspective & Elevation */
-.perspective-2000 {
-  perspective: 2000px;
+/* Apparition au défilement (composant Reveal) : masqué tant que le bloc est sous l'écran */
+.reveal-armed {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-.perspective-1200 {
-  perspective: 1200px;
+.reveal-in {
+  transition: opacity 0.55s var(--ease-ui), transform 0.55s var(--ease-ui);
 }
 
-.backface-hidden {
-  backface-visibility: hidden;
+/* Visible keyboard focus everywhere, never on mouse click */
+:where(a, button, summary, [role="button"]):focus-visible {
+  outline: 2px solid #0052A3;
+  outline-offset: 2px;
 }
 
-.transform-gpu {
-  transform: translateZ(0);
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
-
-/* High-End Architectural Luxury Shadows (Apple / Figma Senior Tier) */
-.shadow-luxury-card {
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.95),
-    0 0 0 1px rgba(15, 23, 42, 0.05),
-    0 1px 2px 0 rgba(15, 23, 42, 0.03),
-    0 6px 16px -2px rgba(15, 23, 42, 0.035),
-    0 16px 36px -6px rgba(0, 82, 163, 0.045),
-    0 32px 64px -16px rgba(15, 23, 42, 0.055);
-}
-
-.shadow-luxury-hover {
-  box-shadow: 
-    inset 0 1px 1px 0 rgba(255, 255, 255, 1),
-    0 0 0 1px rgba(0, 82, 163, 0.2),
-    0 2px 4px 0 rgba(15, 23, 42, 0.04),
-    0 10px 24px -3px rgba(15, 23, 42, 0.06),
-    0 24px 52px -8px rgba(0, 82, 163, 0.12),
-    0 48px 96px -20px rgba(15, 23, 42, 0.08);
-}
-
-.shadow-luxury-master {
-  box-shadow: 
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.98),
-    0 0 0 1px rgba(15, 23, 42, 0.05),
-    0 2px 4px 0 rgba(15, 23, 42, 0.02),
-    0 12px 28px -4px rgba(15, 23, 42, 0.04),
-    0 28px 60px -10px rgba(0, 82, 163, 0.06),
-    0 54px 110px -20px rgba(15, 23, 42, 0.07);
-}
-
-.shadow-luxury-master-hover {
-  box-shadow: 
-    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1),
-    0 0 0 1px rgba(0, 82, 163, 0.22),
-    0 4px 8px 0 rgba(15, 23, 42, 0.03),
-    0 16px 36px -6px rgba(15, 23, 42, 0.06),
-    0 36px 72px -12px rgba(0, 82, 163, 0.12),
-    0 64px 120px -28px rgba(15, 23, 42, 0.10);
-}
-
-.shadow-luxury-sub {
-  box-shadow: 
-    inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.95),
-    0 0 0 1px rgba(15, 23, 42, 0.04),
-    0 1px 2px 0 rgba(15, 23, 42, 0.02),
-    0 4px 12px -2px rgba(15, 23, 42, 0.03);
-}
-
-.shadow-luxury-sub-hover {
-  box-shadow: 
-    inset 0 1px 0.5px 0 rgba(255, 255, 255, 1),
-    0 0 0 1px rgba(0, 82, 163, 0.18),
-    0 2px 6px 0 rgba(15, 23, 42, 0.03),
-    0 8px 20px -4px rgba(0, 82, 163, 0.08);
-}
-
-/* Apple 2026 Design System - Diffuse Ambient Shadows */
-.shadow-apple-card {
-  box-shadow: 
-    0 1px 2px 0 rgba(0, 0, 0, 0.02),
-    0 4px 12px 0 rgba(0, 0, 0, 0.03),
-    0 12px 28px -4px rgba(15, 23, 42, 0.05),
-    0 24px 60px -12px rgba(15, 23, 42, 0.06),
-    0 0 0 1px rgba(0, 0, 0, 0.045),
-    inset 0 1px 0.5px 0 rgba(255, 255, 255, 1);
-}
-
-.shadow-apple-hover {
-  box-shadow: 
-    0 2px 6px 0 rgba(0, 0, 0, 0.03),
-    0 8px 24px -2px rgba(15, 23, 42, 0.06),
-    0 20px 44px -6px rgba(15, 23, 42, 0.08),
-    0 40px 88px -14px rgba(0, 82, 163, 0.09),
-    0 0 0 1px rgba(0, 82, 163, 0.16),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 1);
-}
-
-.shadow-apple-chip {
-  box-shadow: 
-    0 1px 2px 0 rgba(0, 0, 0, 0.02),
-    0 3px 8px -1px rgba(15, 23, 42, 0.04),
-    0 0 0 1px rgba(0, 0, 0, 0.035),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
-}
-
-.shadow-apple-chip-hover {
-  box-shadow: 
-    0 2px 4px 0 rgba(0, 0, 0, 0.03),
-    0 6px 16px -2px rgba(0, 82, 163, 0.08),
-    0 0 0 1px rgba(0, 82, 163, 0.18),
-    inset 0 1px 0 0 rgba(255, 255, 255, 1);
-}
-
-/* Figma Senior Luxury Tier - White Elements on Deep Blue Canvas */
-.shadow-luxury-on-dark {
-  box-shadow: 
-    0 4px 12px 0 rgba(0, 0, 0, 0.25),
-    0 16px 36px -6px rgba(0, 0, 0, 0.45),
-    0 32px 70px -12px rgba(0, 15, 35, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.15),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 1);
-}
-
-.shadow-luxury-on-dark-hover {
-  box-shadow: 
-    0 8px 24px -2px rgba(0, 0, 0, 0.3),
-    0 24px 50px -8px rgba(0, 0, 0, 0.55),
-    0 45px 90px -16px rgba(0, 15, 35, 0.65),
-    0 0 0 1px rgba(56, 189, 248, 0.35),
-    0 0 40px -10px rgba(0, 82, 163, 0.45),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 1);
-}
-
-
-

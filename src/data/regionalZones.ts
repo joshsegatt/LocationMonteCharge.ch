@@ -1,3 +1,5 @@
+import { frTypo } from '../lib/typo';
+
 export interface RegionalZone {
   slug: string;
   cityName: string;
@@ -16,16 +18,16 @@ export interface RegionalZone {
   seoKeywords: string[];
 }
 
-export const regionalZones: Record<string, RegionalZone> = {
+export const regionalZones: Record<string, RegionalZone> = frTypo({
   lausanne: {
     slug: "lausanne",
     cityName: "Lausanne",
     canton: "Canton de Vaud",
-    metaTitle: "Location Monte-Meuble Lausanne & Région Vaudoise | BatiMove Sàrl",
-    metaDescription: "Location de monte-meuble à Lausanne, Pully, Renens et Lutry jusqu'au 10ᵉ étage (500 kg). Déménagement par fenêtre avec opérateur certifié SUVA. Devis 0800 825 925.",
-    h1Primary: "Location Monte-Meuble",
+    metaTitle: "Location Monte-Meuble Lausanne & Région | BatiMove Sàrl",
+    metaDescription: "Monte-meuble à Lausanne, Pully, Renens et Lutry. Passage par la fenêtre jusqu'au 10ᵉ étage (500 kg), opérateur formé SUVA. Devis gratuit au 0800 825 925.",
+    h1Primary: "Location monte-meuble",
     h1Secondary: "Lausanne & Vaud",
-    heroCategory: "Logistique Verticale • Lausanne & Région Vaudoise",
+    heroCategory: "Logistique Verticale, Lausanne & Région Vaudoise",
     subtitle: "Passage sécurisé de canapés, pianos, vitrages et mobilier volumineux par fenêtre ou balcon sur Lausanne, Pully, Renens et tout le canton de Vaud. Démarches de voirie communale et opérateur SUVA inclus.",
     heroHighlights: [
       "Intervention en hypercentre, pentes lausannoises et cours intérieures",
@@ -55,12 +57,12 @@ export const regionalZones: Record<string, RegionalZone> = {
   nyon: {
     slug: "nyon",
     cityName: "Nyon",
-    canton: "Vaud • La Côte",
+    canton: "Vaud, La Côte",
     metaTitle: "Location Monte-Meuble Nyon & La Côte | BatiMove Sàrl",
-    metaDescription: "Location de monte-meuble à Nyon, Gland, Rolle et Terre-Sainte jusqu'au 10ᵉ étage (500 kg). Levage par balcon avec opérateur SUVA. Devis 0800 825 925 ou WhatsApp.",
-    h1Primary: "Location Monte-Meuble",
+    metaDescription: "Monte-meuble à Nyon, Gland, Rolle et Terre-Sainte. Levage par le balcon jusqu'au 10ᵉ étage (500 kg), opérateur formé SUVA. Devis gratuit au 0800 825 925.",
+    h1Primary: "Location monte-meuble",
     h1Secondary: "Nyon & La Côte",
-    heroCategory: "Logistique Verticale • Nyon & District de La Côte",
+    heroCategory: "Logistique Verticale, Nyon & District de La Côte",
     subtitle: "Levage télescopique pour villas de standing, copropriétés et appartements à Nyon, Gland, Rolle et Terre-Sainte. Passage par balcon ou terrasse jusqu'au 10ᵉ étage sans abîmer les parties communes.",
     heroHighlights: [
       "Desserte express du district de Nyon et de La Côte",
@@ -89,12 +91,12 @@ export const regionalZones: Record<string, RegionalZone> = {
   morges: {
     slug: "morges",
     cityName: "Morges",
-    canton: "Vaud • District de Morges",
+    canton: "Vaud, District de Morges",
     metaTitle: "Location Monte-Meuble Morges & District | BatiMove Sàrl",
-    metaDescription: "Location de monte-meuble à Morges, Saint-Prex et Tolochenaz jusqu'au 10ᵉ étage (500 kg). Levage de canapés, pianos et cuisines avec opérateur SUVA. Devis 0800 825 925.",
-    h1Primary: "Location Monte-Meuble",
+    metaDescription: "Monte-meuble à Morges, Saint-Prex et Tolochenaz. Canapés, pianos et cuisines jusqu'au 10ᵉ étage (500 kg), opérateur formé SUVA. Devis gratuit 0800 825 925.",
+    h1Primary: "Location monte-meuble",
     h1Secondary: "Morges & District",
-    heroCategory: "Logistique Verticale • Morges & District",
+    heroCategory: "Logistique Verticale, Morges & District",
     subtitle: "Prestation de monte-meuble autotracté à Morges, Saint-Prex, Tolochenaz et Préverenges. Déploiement sécurisé sur façades et cours intérieures jusqu'au 10ᵉ étage pour particuliers et régies.",
     heroHighlights: [
       "Desserte rapide du littoral morgien et de l'arrière-pays",
@@ -122,13 +124,13 @@ export const regionalZones: Record<string, RegionalZone> = {
   vevey: {
     slug: "vevey",
     cityName: "Vevey & Montreux",
-    canton: "Vaud • Riviera",
-    metaTitle: "Location Monte-Meuble Vevey & Montreux (Riviera) | BatiMove Sàrl",
-    metaDescription: "Location monte-meuble à Vevey, Montreux, La Tour-de-Peilz et Riviera vaudoise (500 kg, 10ᵉ étage). Opérateur SUVA et balisage inclus. Devis direct au 0800 825 925.",
-    h1Primary: "Location Monte-Meuble",
+    canton: "Vaud, Riviera",
+    metaTitle: "Location Monte-Meuble Vevey & Montreux | BatiMove Sàrl",
+    metaDescription: "Monte-meuble à Vevey, Montreux et La Tour-de-Peilz. Jusqu'au 10ᵉ étage (500 kg), opérateur formé SUVA et balisage inclus. Devis gratuit au 0800 825 925.",
+    h1Primary: "Location monte-meuble",
     h1Secondary: "Vevey & Montreux",
-    heroCategory: "Logistique Verticale • Riviera Vaudoise",
-    subtitle: "Levage de haute précision pour résidences en pente, attiques et chantiers sur la Riviera vaudoise. Intervention à Vevey, Montreux, La Tour-de-Peilz, Blonay et Clarens avec matériel certifié SUVA.",
+    heroCategory: "Logistique Verticale, Riviera Vaudoise",
+    subtitle: "Levage de haute précision pour résidences en pente, attiques et chantiers sur la Riviera vaudoise. Intervention à Vevey, Montreux, La Tour-de-Peilz, Blonay et Clarens avec un opérateur formé aux prescriptions SUVA.",
     heroHighlights: [
       "Accès aux terrains escarpés et résidences panoramiques du lac",
       "Plateforme spacieuse 500 kg pour meubles lourds et baies vitrées",
@@ -157,10 +159,10 @@ export const regionalZones: Record<string, RegionalZone> = {
     cityName: "Genève Centre",
     canton: "Canton de Genève",
     metaTitle: "Location Monte-Meuble Genève Centre & Ville | BatiMove Sàrl",
-    metaDescription: "Location de monte-meuble à Genève Centre, Vieille-Ville, Pâquis et Plainpalais. Passage par fenêtre jusqu'au 10ᵉ étage (500 kg) avec opérateur SUVA. Devis 0800 825 925.",
-    h1Primary: "Location Monte-Meuble",
-    h1Secondary: "Genève Centre",
-    heroCategory: "Logistique Verticale • Genève Hypercentre",
+    metaDescription: "Monte-meuble à Genève : Vieille-Ville, Pâquis, Plainpalais. Passage par la fenêtre jusqu'au 10ᵉ étage (500 kg), opérateur formé SUVA. Devis 0800 825 925.",
+    h1Primary: "Location monte-meuble",
+    h1Secondary: "Genève centre",
+    heroCategory: "Logistique Verticale, Genève Hypercentre",
     subtitle: "Spécialiste genevois du passage de meubles par fenêtre en hypercentre, ruelles pavées et immeubles classés. Autorisations voirie SEP Ville de Genève et opérateur SUVA inclus.",
     heroHighlights: [
       "Desserte immédiate de la Cité, Vieille-Ville, Pâquis et Rive",
@@ -188,12 +190,12 @@ export const regionalZones: Record<string, RegionalZone> = {
   carouge: {
     slug: "carouge",
     cityName: "Carouge",
-    canton: "Genève • Rive Gauche",
+    canton: "Genève, Rive Gauche",
     metaTitle: "Location Monte-Meuble Carouge & Rive Gauche | BatiMove Sàrl",
-    metaDescription: "Location monte-meuble à Carouge, Acacias et Lancy. Échelle télescopique pour cours sardes et balcons étroits jusqu'au 10ᵉ étage. Opérateur SUVA. Devis 0800 825 925.",
-    h1Primary: "Location Monte-Meuble",
-    h1Secondary: "Carouge & Rive Gauche",
-    heroCategory: "Logistique Verticale • Carouge & Cité Sarde",
+    metaDescription: "Monte-meuble à Carouge, Acacias et Lancy. Cours sardes et balcons étroits, jusqu'au 10ᵉ étage (500 kg), opérateur formé SUVA. Devis gratuit au 0800 825 925.",
+    h1Primary: "Location monte-meuble",
+    h1Secondary: "Carouge & Rive gauche",
+    heroCategory: "Logistique Verticale, Carouge & Cité Sarde",
     subtitle: "Intervention sur-mesure dans la Cité Sarde et ses cours intérieures étroites. Hissage direct de mobilier volumineux, canapés et matériaux sans abîmer les ferronneries ou escaliers.",
     heroHighlights: [
       "Expertise unique pour les cours sardes et passages sous porche",
@@ -223,11 +225,11 @@ export const regionalZones: Record<string, RegionalZone> = {
     cityName: "Plainpalais & Jonction",
     canton: "Genève",
     metaTitle: "Location Monte-Meuble Plainpalais & Jonction | BatiMove Sàrl",
-    metaDescription: "Location monte-meuble à Plainpalais, Jonction et Bastions. Passage par fenêtre jusqu'au 10ᵉ étage (500 kg). Balisage voirie et opérateur SUVA. Devis 0800 825 925.",
-    h1Primary: "Location Monte-Meuble",
+    metaDescription: "Monte-meuble à Plainpalais, Jonction et Bastions. Passage par la fenêtre jusqu'au 10ᵉ étage (500 kg), balisage de voirie inclus. Devis gratuit 0800 825 925.",
+    h1Primary: "Location monte-meuble",
     h1Secondary: "Plainpalais & Jonction",
-    heroCategory: "Logistique Verticale • Plainpalais & Jonction",
-    subtitle: "Levage vertical rapide pour les appartements anciens et immeubles de régie à Plainpalais, Jonction et Philosophes. Passage direct par fenêtre ou balcon sans bloquer les parties communes.",
+    heroCategory: "Logistique Verticale, Plainpalais & Jonction",
+    subtitle: "Levage vertical pour les appartements anciens et immeubles de régie à Plainpalais, Jonction et Philosophes. Passage direct par fenêtre ou balcon sans bloquer les parties communes.",
     heroHighlights: [
       "Spécialiste des grands appartements aux plafonds hauts",
       "Déménagement de pianos droits et à queue, canapés d'angle",
@@ -238,7 +240,7 @@ export const regionalZones: Record<string, RegionalZone> = {
       "Plainpalais", "Jonction", "Cluse-Roseraie", "Bastions", 
       "Boulevard Carl-Vogt", "Rue de Carouge", "Arve", "Philosophes"
     ],
-    voirieInfo: "Balisage réglementaire immédiat et démarches de voirie coordonnées auprès du Service de l'espace public (SEP).",
+    voirieInfo: "Balisage réglementaire et démarches de voirie coordonnées auprès du Service de l'espace public (SEP).",
     postalCodes: ["1205", "1204"],
     eta: "Intervention sous 20 min",
     seoKeywords: [
@@ -252,12 +254,12 @@ export const regionalZones: Record<string, RegionalZone> = {
   "eaux-vives": {
     slug: "eaux-vives",
     cityName: "Eaux-Vives & Champel",
-    canton: "Genève • Rive Gauche",
+    canton: "Genève, Rive Gauche",
     metaTitle: "Location Monte-Meuble Eaux-Vives & Champel | BatiMove Sàrl",
-    metaDescription: "Location monte-meuble aux Eaux-Vives, Champel, Florissant et Cologny (500 kg, 10ᵉ étage). Canapés et pianos par balcon avec opérateur SUVA. Devis 0800 825 925.",
-    h1Primary: "Location Monte-Meuble",
+    metaDescription: "Monte-meuble aux Eaux-Vives, Champel, Florissant et Cologny. Canapés et pianos par le balcon jusqu'au 10ᵉ étage (500 kg). Devis gratuit au 0800 825 925.",
+    h1Primary: "Location monte-meuble",
     h1Secondary: "Eaux-Vives & Champel",
-    heroCategory: "Logistique Verticale • Eaux-Vives, Champel & Cologny",
+    heroCategory: "Logistique Verticale, Eaux-Vives, Champel & Cologny",
     subtitle: "Monte-meuble haut de gamme pour appartements de standing, attiques et villas sur la Rive Gauche. Déploiement sécurisé pour canapés monoblocs, marbre, vitrage et mobilier précieux.",
     heroHighlights: [
       "Intervention soignée pour résidences de standing et attiques",
@@ -285,13 +287,13 @@ export const regionalZones: Record<string, RegionalZone> = {
   meyrin: {
     slug: "meyrin",
     cityName: "Meyrin & Vernier",
-    canton: "Genève • Rive Droite",
+    canton: "Genève, Rive Droite",
     metaTitle: "Location Monte-Meuble Meyrin & Vernier | BatiMove Sàrl",
-    metaDescription: "Location monte-meuble à Meyrin, Vernier, Servette et Grand-Saconnex (500 kg, 10ᵉ étage). Équipement télescopique avec opérateur SUVA. Devis 0800 825 925.",
-    h1Primary: "Location Monte-Meuble",
+    metaDescription: "Monte-meuble à Meyrin, Vernier, Servette et Grand-Saconnex. Jusqu'au 10ᵉ étage (500 kg), opérateur formé SUVA, voirie incluse. Devis gratuit 0800 825 925.",
+    h1Primary: "Location monte-meuble",
     h1Secondary: "Meyrin & Vernier",
-    heroCategory: "Logistique Verticale • Meyrin, Vernier & Servette",
-    subtitle: "Desserte express pour les grands ensembles résidentiels, attiques et chantiers de la Rive Droite et de la zone aéroportuaire. Opérateur certifié SUVA et formalités de voirie assurées.",
+    heroCategory: "Logistique Verticale, Meyrin, Vernier & Servette",
+    subtitle: "Monte-meuble pour les grands ensembles résidentiels, attiques et chantiers de la Rive Droite et de la zone aéroportuaire. Opérateur formé aux prescriptions SUVA et formalités de voirie assurées.",
     heroHighlights: [
       "Intervention rapide sur Meyrin, Vernier, Le Lignon et Servette",
       "Levage jusqu'au 10ᵉ étage pour barres d'immeubles et attiques",
@@ -314,4 +316,4 @@ export const regionalZones: Record<string, RegionalZone> = {
       "location monte charge avanchets"
     ],
   },
-};
+});
